@@ -1,19 +1,12 @@
-import { Component, ElementRef, OnInit  } from '@angular/core';
-import { Replace } from './../shared';
+import {Component, HostBinding} from '@angular/core';
 
 @Component({
-  selector: 'app-sidebar-header',
-  template: `
-    <div class="sidebar-header">
-      <ng-content></ng-content>
-    </div>
-  `
+  selector: 'app-sidebar-header, cui-sidebar-header',
+  template: `<ng-content></ng-content>`
 })
-export class AppSidebarHeaderComponent implements OnInit {
+export class AppSidebarHeaderComponent {
 
-  constructor(private el: ElementRef) { }
+  @HostBinding('class.sidebar-header') _sidebarHeader = true;
 
-  ngOnInit() {
-    Replace(this.el);
-  }
+  constructor() { }
 }

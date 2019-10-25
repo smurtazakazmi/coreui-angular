@@ -1,38 +1,28 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-import { Component, ElementRef } from '@angular/core';
-import { Replace } from '../shared/index';
+import { Component, HostBinding } from '@angular/core';
 var AppSidebarFormComponent = /** @class */ (function () {
-    function AppSidebarFormComponent(el) {
-        this.el = el;
+    function AppSidebarFormComponent() {
+        this._sidebarForm = true;
     }
-    /**
-     * @return {?}
-     */
-    AppSidebarFormComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
-        Replace(this.el);
-    };
     AppSidebarFormComponent.decorators = [
         { type: Component, args: [{
-                    selector: 'app-sidebar-form',
-                    template: "\n    <form class=\"sidebar-form\">\n      <ng-content></ng-content>\n    </form>\n  "
-                },] },
+                    selector: 'app-sidebar-form, cui-sidebar-form',
+                    template: "<ng-content></ng-content>"
+                }] }
     ];
     /** @nocollapse */
-    AppSidebarFormComponent.ctorParameters = function () { return [
-        { type: ElementRef }
-    ]; };
+    AppSidebarFormComponent.ctorParameters = function () { return []; };
+    AppSidebarFormComponent.propDecorators = {
+        _sidebarForm: [{ type: HostBinding, args: ['class.sidebar-form',] }]
+    };
     return AppSidebarFormComponent;
 }());
 export { AppSidebarFormComponent };
-function AppSidebarFormComponent_tsickle_Closure_declarations() {
+if (false) {
     /** @type {?} */
-    AppSidebarFormComponent.prototype.el;
+    AppSidebarFormComponent.prototype._sidebarForm;
 }
-
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLXNpZGViYXItZm9ybS5jb21wb25lbnQuanMiLCJzb3VyY2VSb290Ijoibmc6Ly9AY29yZXVpL2FuZ3VsYXIvIiwic291cmNlcyI6WyJsaWIvc2lkZWJhci9hcHAtc2lkZWJhci1mb3JtLmNvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFFLFNBQVMsRUFBRSxVQUFVLEVBQVcsTUFBTSxlQUFlLENBQUM7QUFDL0QsT0FBTyxFQUFFLE9BQU8sRUFBRSxNQUFNLGFBQWEsQ0FBQzs7SUFZcEMsaUNBQW9CLEVBQWM7UUFBZCxPQUFFLEdBQUYsRUFBRSxDQUFZO0tBQUs7Ozs7SUFFdkMsMENBQVE7OztJQUFSO1FBQ0UsT0FBTyxDQUFDLElBQUksQ0FBQyxFQUFFLENBQUMsQ0FBQztLQUNsQjs7Z0JBZEYsU0FBUyxTQUFDO29CQUNULFFBQVEsRUFBRSxrQkFBa0I7b0JBQzVCLFFBQVEsRUFBRSx1RkFJVDtpQkFDRjs7OztnQkFWbUIsVUFBVTs7a0NBQTlCOztTQVdhLHVCQUF1QiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IENvbXBvbmVudCwgRWxlbWVudFJlZiwgT25Jbml0ICB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBSZXBsYWNlIH0gZnJvbSAnLi8uLi9zaGFyZWQnO1xyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtc2lkZWJhci1mb3JtJyxcclxuICB0ZW1wbGF0ZTogYFxyXG4gICAgPGZvcm0gY2xhc3M9XCJzaWRlYmFyLWZvcm1cIj5cclxuICAgICAgPG5nLWNvbnRlbnQ+PC9uZy1jb250ZW50PlxyXG4gICAgPC9mb3JtPlxyXG4gIGBcclxufSlcclxuZXhwb3J0IGNsYXNzIEFwcFNpZGViYXJGb3JtQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcclxuXHJcbiAgY29uc3RydWN0b3IocHJpdmF0ZSBlbDogRWxlbWVudFJlZikgeyB9XHJcblxyXG4gIG5nT25Jbml0KCkge1xyXG4gICAgUmVwbGFjZSh0aGlzLmVsKTtcclxuICB9XHJcbn1cclxuIl19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLXNpZGViYXItZm9ybS5jb21wb25lbnQuanMiLCJzb3VyY2VSb290Ijoibmc6Ly9AY29yZXVpL2FuZ3VsYXIvIiwic291cmNlcyI6WyJsaWIvc2lkZWJhci9hcHAtc2lkZWJhci1mb3JtLmNvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFDLFNBQVMsRUFBRSxXQUFXLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFFckQ7SUFRRTtRQUZtQyxpQkFBWSxHQUFHLElBQUksQ0FBQztJQUV2QyxDQUFDOztnQkFSbEIsU0FBUyxTQUFDO29CQUNULFFBQVEsRUFBRSxvQ0FBb0M7b0JBQzlDLFFBQVEsRUFBRSwyQkFBMkI7aUJBQ3RDOzs7OzsrQkFHRSxXQUFXLFNBQUMsb0JBQW9COztJQUduQyw4QkFBQztDQUFBLEFBVEQsSUFTQztTQUxZLHVCQUF1Qjs7O0lBRWxDLCtDQUF1RCIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7Q29tcG9uZW50LCBIb3N0QmluZGluZ30gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5cbkBDb21wb25lbnQoe1xuICBzZWxlY3RvcjogJ2FwcC1zaWRlYmFyLWZvcm0sIGN1aS1zaWRlYmFyLWZvcm0nLFxuICB0ZW1wbGF0ZTogYDxuZy1jb250ZW50PjwvbmctY29udGVudD5gXG59KVxuZXhwb3J0IGNsYXNzIEFwcFNpZGViYXJGb3JtQ29tcG9uZW50IHtcblxuICBASG9zdEJpbmRpbmcoJ2NsYXNzLnNpZGViYXItZm9ybScpIF9zaWRlYmFyRm9ybSA9IHRydWU7XG5cbiAgY29uc3RydWN0b3IoKSB7IH1cbn1cbiJdfQ==

@@ -6,8 +6,10 @@ import {
   MobileSidebarToggleDirective,
   SidebarToggleDirective,
   SidebarMinimizeDirective,
-  SidebarOffCanvasCloseDirective
+  SidebarOffCanvasCloseDirective,
+  HtmlAttributesDirective
 } from './layout.directive';
+import { ClassToggler } from '../toggle-classes';
 
 @NgModule({
   imports: [
@@ -19,7 +21,8 @@ import {
     MobileSidebarToggleDirective,
     SidebarToggleDirective,
     SidebarMinimizeDirective,
-    SidebarOffCanvasCloseDirective
+    SidebarOffCanvasCloseDirective,
+    HtmlAttributesDirective
   ],
   declarations: [
     AsideToggleDirective,
@@ -27,7 +30,11 @@ import {
     MobileSidebarToggleDirective,
     SidebarToggleDirective,
     SidebarMinimizeDirective,
-    SidebarOffCanvasCloseDirective
+    SidebarOffCanvasCloseDirective,
+    HtmlAttributesDirective
+  ],
+  providers: [
+    ClassToggler
   ]
 })
 export class LayoutModule { }

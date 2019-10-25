@@ -1,9 +1,22 @@
-[![npm package][npm-badge]][npm] 
-[![NPM downloads][npm-download]][npm]
-  
-[npm-badge]: https://img.shields.io/npm/v/@coreui/angular.png?style=flat-square  
-[npm]: https://www.npmjs.com/package/@coreui/angular  
-[npm-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  
+# [@coreui/angular](https://coreui.io/angular)
+
+[![@coreui angular](https://img.shields.io/badge/@coreui%20-angular-lightgrey.svg?style=flat-square)](https://github.com/coreui/angular)
+[![npm package][npm-coreui-angular-badge]][npm-coreui-angular] 
+[![NPM downloads][npm-coreui-angular-download]][npm-coreui-angular]  
+[![@coreui angular-next](https://img.shields.io/badge/@coreui%20-angular@next-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui-angular)
+[![npm-coreui-angular-next][npm-coreui-angular-next]][npm-coreui-angular]  
+[![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
+[![npm package][npm-coreui-badge]][npm-coreui]
+[![NPM downloads][npm-coreui-download]][npm-coreui]    
+![angular](https://img.shields.io/badge/angular-^8.2.11-lightgrey.svg?style=flat-square)  
+
+[npm-coreui-angular]: https://www.npmjs.com/package/@coreui/angular  
+[npm-coreui-angular-badge]: https://img.shields.io/npm/v/@coreui/angular.png?style=flat-square  
+[npm-coreui-angular-download]: https://img.shields.io/npm/dm/@coreui/angular.svg?style=flat-square  
+[npm-coreui-angular-next]: https://img.shields.io/npm/v/@coreui/angular/next.png?style=flat-square
+[npm-coreui]: https://www.npmjs.com/package/@coreui/coreui
+[npm-coreui-badge]: https://img.shields.io/npm/v/@coreui/coreui.png?style=flat-square
+[npm-coreui-download]: https://img.shields.io/npm/dm/@coreui/coreui.svg?style=flat-square
 
 # CoreUI for Angular 2+ - Free WebApp UI Kit built on top of Bootstrap 4 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?text=CoreUI%20-%20Free%20Bootstrap%204%20Admin%20Template%20&url=https://coreui.io&hashtags=,admin,template,dashboard,panel,free,angular,react,vue)
 
@@ -17,7 +30,8 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 
 * [Templates](#templates)
 * [Admin Templates built on top of CoreUI Pro](#admin-templates-built-on-top-of-coreui-pro)
-* [Installation](#installation)
+* [Prerequisites](#prerequisites)
+* [Installation](#coreui-installation)
 * [Usage](#usage)
 * [What's included](#whats-included)
 * [Documentation](#documentation)
@@ -37,10 +51,27 @@ CoreUI is an Open Source UI Kit built on top of Bootstrap 4. CoreUI is the faste
 
 | CoreUI Pro | Prime | Root | Alba | Leaf |
 | --- | --- | --- | --- | --- |
-| [![CoreUI Pro Admin Template](https://coreui.io/assets/img/example-coureui.jpg)](https://coreui.io/pro/angular/) | [![Prime Admin Template](https://genesisui.com/assets/img/templates/prime1280.jpg)](https://genesisui.com/admin-templates/angular/prime/?support=1) | [![Root Admin Template](https://genesisui.com/assets/img/templates/root1280.jpg)](https://genesisui.com/admin-templates/angular/root/?support=1) | [![Alba Admin Template](https://genesisui.com/assets/img/templates/alba1280.jpg)](https://genesisui.com/admin-templates/angular/alba/?support=1) | [![Leaf Admin Template](https://genesisui.com/assets/img/templates/leaf1280.jpg)](https://genesisui.com/admin-templates/angular/leaf/?support=1)
+| [![CoreUI Pro Admin Template](https://coreui.io/assets/img/example-coureui.jpg)](https://coreui.io/pro/angular/)| [![Prime Admin Template](https://coreui.io/assets/img/responsive-prime.png)](https://coreui.io/admin-templates/angular/prime/?support=1)| [![Root Admin Template](https://coreui.io/assets/img/responsive-root.png)](https://coreui.io/admin-templates/angular/root/?support=1)| [![Alba Admin Template](https://coreui.io/assets/img/responsive-alba.png)](https://coreui.io/admin-templates/angular/alba/?support=1)| [![Leaf Admin Template](https://coreui.io/assets/img/responsive-leaf.png)](https://coreui.io/admin-templates/angular/leaf/?support=1)
 
+#### Prerequisites
+Before you begin, make sure your development environment includes `Node.js®` and an `npm` package manager.
 
-## Installation
+###### Node.js
+Angular 8 requires `Node.js` version 12.x
+
+- To check your version, run `node -v` in a terminal/console window.
+- To get `Node.js`, go to [nodejs.org](https://nodejs.org/).
+
+###### Angular CLI
+Install the Angular CLI globally using a terminal/console window.
+```bash
+npm install -g @angular/cli
+```
+
+##### Update to Angular 8
+see: [https://update.angular.io](https://update.angular.io)
+
+## CoreUI Installation
 
 Several options are available:
 
@@ -59,7 +90,7 @@ $ npm install @coreui/angular --save
 ### Yarn
 
 ``` bash
-$ yarn add @coreui/angular@2.0.0
+$ yarn add @coreui/angular
 ```
 
 ## Usage
@@ -120,7 +151,7 @@ Get updates on CoreUI's development and chat with the project maintainers and co
 
 ## Copyright and license
 
-copyright 2018 creativeLabs Łukasz Holeczek. Code released under [the MIT license](https://github.com/coreui/coreui-angular/blob/master/LICENSE).
+copyright 2017-2019 creativeLabs Łukasz Holeczek. Code released under [the MIT license](https://github.com/coreui/coreui-angular/blob/master/LICENSE).
 There is only one limitation you can't can’t re-distribute the CoreUI as stock. You can’t do this if you modify the CoreUI. In past we faced some problems with persons who tried to sell CoreUI based templates.
 
 ## Support CoreUI Development

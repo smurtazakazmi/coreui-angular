@@ -1,40 +1,52 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
-import { asideMenuCssClasses, Replace } from './../shared/index';
+import {Component, Input, OnInit, OnDestroy, Inject, Renderer2, HostBinding} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+
+import { asideMenuCssClasses } from '../shared';
 
 @Component({
-  selector: 'app-aside',
-  template: `
-    <aside class="aside-menu">
-      <ng-content></ng-content>
-    </aside>
-  `
+  selector: 'app-aside, cui-aside',
+  template: `<ng-content></ng-content>`
 })
-export class AppAsideComponent implements OnInit {
+export class AppAsideComponent implements OnInit, OnDestroy {
   @Input() display: any;
   @Input() fixed: boolean;
   @Input() offCanvas: boolean;
 
-  constructor(private el: ElementRef) {}
+  private readonly fixedClass = 'aside-menu-fixed';
 
-  ngOnInit() {
-    Replace(this.el);
+  @HostBinding('class.aside-menu') _aside = true;
+
+  constructor(
+    @Inject(DOCUMENT) private document: any,
+    private renderer: Renderer2,
+  ) { }
+
+  ngOnInit(): void {
     this.isFixed(this.fixed);
+    this.isOffCanvas(this.offCanvas);
     this.displayBreakpoint(this.display);
   }
 
-  isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('aside-menu-fixed'); }
+  ngOnDestroy(): void {
+    this.renderer.removeClass(this.document.body, this.fixedClass);
   }
 
-  isOffCanvas(offCanvas: boolean): void {
-    if (this.offCanvas) { document.querySelector('body').classList.add('aside-menu-off-canvas'); }
+  isFixed(fixed: boolean = this.fixed): void {
+    if (fixed) {
+      this.renderer.addClass(this.document.body, this.fixedClass);
+    }
   }
 
-  displayBreakpoint(display: any): void {
-    if (this.display !== false ) {
-      let cssClass;
-      this.display ? cssClass = `aside-menu-${this.display}-show` : cssClass = asideMenuCssClasses[0];
-      document.querySelector('body').classList.add(cssClass);
+  isOffCanvas(offCanvas: boolean = this.offCanvas): void {
+    if (offCanvas) {
+      this.renderer.addClass(this.document.body, 'aside-menu-off-canvas');
+    }
+  }
+
+  displayBreakpoint(display: any = this.display): void {
+    if (display !== false ) {
+      const cssClass = this.display ? `aside-menu-${this.display}-show` : asideMenuCssClasses[0];
+      this.renderer.addClass(this.document.body, cssClass);
     }
   }
 }

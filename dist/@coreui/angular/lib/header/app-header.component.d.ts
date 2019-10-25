@@ -1,20 +1,31 @@
-import { ElementRef, OnInit } from '@angular/core';
-export declare class AppHeaderComponent implements OnInit {
-    private el;
+import { OnInit, OnDestroy, Renderer2 } from '@angular/core';
+export declare class AppHeaderComponent implements OnInit, OnDestroy {
+    private document;
+    private renderer;
     fixed: boolean;
     navbarBrand: any;
     navbarBrandFull: any;
     navbarBrandMinimized: any;
-    sidebarToggler: any;
-    mobileSidebarToggler: any;
-    asideMenuToggler: any;
-    mobileAsideMenuToggler: any;
-    constructor(el: ElementRef);
+    navbarBrandText: any;
+    navbarBrandHref: '';
+    navbarBrandRouterLink: any[] | string;
+    sidebarToggler: string | boolean;
+    mobileSidebarToggler: boolean;
+    asideMenuToggler: string | boolean;
+    mobileAsideMenuToggler: boolean;
+    private readonly fixedClass;
+    _header: boolean;
+    _navbar: boolean;
+    navbarBrandImg: boolean;
+    private readonly breakpoints;
+    sidebarTogglerClass: string;
+    sidebarTogglerMobileClass: string;
+    asideTogglerClass: string;
+    asideTogglerMobileClass: string;
+    constructor(document: any, renderer: Renderer2);
     ngOnInit(): void;
-    isFixed(fixed: boolean): void;
-    imgSrc(brand: any): void;
-    imgWidth(brand: any): void;
-    imgHeight(brand: any): void;
-    imgAlt(brand: any): void;
-    breakpoint(breakpoint: any): void;
+    ngOnDestroy(): void;
+    isFixed(fixed?: boolean): void;
+    setToggerBreakpointClass(breakpoint?: string): string;
+    setToggerMobileBreakpointClass(breakpoint?: string): string;
 }

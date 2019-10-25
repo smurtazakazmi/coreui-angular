@@ -1,21 +1,23 @@
-import { Directive, HostListener, Input, NgModule, Component, ElementRef, Injectable, HostBinding, Renderer2 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
-import { BehaviorSubject } from 'rxjs/index';
+import { Injectable, Inject, Renderer2, Directive, Input, HostListener, ElementRef, NgModule, Component, HostBinding, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Output, Pipe } from '@angular/core';
+import { DOCUMENT, CommonModule } from '@angular/common';
+import { NavigationEnd, Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-const /** @type {?} */ sidebarCssClasses = [
+/** @type {?} */
+const sidebarCssClasses = [
     'sidebar-show',
     'sidebar-sm-show',
     'sidebar-md-show',
     'sidebar-lg-show',
     'sidebar-xl-show'
 ];
-const /** @type {?} */ asideMenuCssClasses = [
+/** @type {?} */
+const asideMenuCssClasses = [
     'aside-menu-show',
     'aside-menu-sm-show',
     'aside-menu-md-show',
@@ -25,32 +27,124 @@ const /** @type {?} */ asideMenuCssClasses = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-const /** @type {?} */ RemoveClasses = (NewClassNames) => {
-    const /** @type {?} */ MatchClasses = NewClassNames.map((Class) => document.querySelector('body').classList.contains(Class));
+/** @type {?} */
+const RemoveClasses = (/**
+ * @param {?} NewClassNames
+ * @return {?}
+ */
+(NewClassNames) => {
+    /** @type {?} */
+    const MatchClasses = NewClassNames.map((/**
+     * @param {?} Class
+     * @return {?}
+     */
+    (Class) => document.body.classList.contains(Class)));
     return MatchClasses.indexOf(true) !== -1;
-};
-const /** @type {?} */ ToggleClasses = (Toggle, ClassNames) => {
-    const /** @type {?} */ Level = ClassNames.indexOf(Toggle);
-    const /** @type {?} */ NewClassNames = ClassNames.slice(0, Level + 1);
+});
+const ɵ0 = RemoveClasses;
+/** @type {?} */
+const ToggleClasses = (/**
+ * @param {?} Toggle
+ * @param {?} ClassNames
+ * @return {?}
+ */
+(Toggle, ClassNames) => {
+    /** @type {?} */
+    const Level = ClassNames.indexOf(Toggle);
+    /** @type {?} */
+    const NewClassNames = ClassNames.slice(0, Level + 1);
     if (RemoveClasses(NewClassNames)) {
-        NewClassNames.map((Class) => document.querySelector('body').classList.remove(Class));
+        NewClassNames.map((/**
+         * @param {?} Class
+         * @return {?}
+         */
+        (Class) => document.body.classList.remove(Class)));
     }
     else {
-        document.querySelector('body').classList.add(Toggle);
+        document.body.classList.add(Toggle);
     }
-};
+});
+class ClassToggler {
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     */
+    constructor(document, renderer) {
+        this.document = document;
+        this.renderer = renderer;
+    }
+    /**
+     * @param {?} NewClassNames
+     * @return {?}
+     */
+    removeClasses(NewClassNames) {
+        /** @type {?} */
+        const MatchClasses = NewClassNames.map((/**
+         * @param {?} Class
+         * @return {?}
+         */
+        (Class) => this.document.body.classList.contains(Class)));
+        return MatchClasses.indexOf(true) !== -1;
+    }
+    /**
+     * @param {?} Toggle
+     * @param {?} ClassNames
+     * @return {?}
+     */
+    toggleClasses(Toggle, ClassNames) {
+        /** @type {?} */
+        const Level = ClassNames.indexOf(Toggle);
+        /** @type {?} */
+        const NewClassNames = ClassNames.slice(0, Level + 1);
+        if (this.removeClasses(NewClassNames)) {
+            NewClassNames.map((/**
+             * @param {?} Class
+             * @return {?}
+             */
+            (Class) => this.renderer.removeClass(this.document.body, Class)));
+        }
+        else {
+            this.renderer.addClass(this.document.body, Toggle);
+        }
+    }
+}
+ClassToggler.decorators = [
+    { type: Injectable }
+];
+/** @nocollapse */
+ClassToggler.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 }
+];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ClassToggler.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    ClassToggler.prototype.renderer;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Allows the sidebar to be toggled via click.
  */
 class SidebarToggleDirective {
-    constructor() { }
+    /**
+     * @param {?} classToggler
+     */
+    constructor(classToggler) {
+        this.classToggler = classToggler;
+    }
     /**
      * @return {?}
      */
@@ -63,52 +157,91 @@ class SidebarToggleDirective {
      */
     toggleOpen($event) {
         $event.preventDefault();
-        let /** @type {?} */ cssClass;
-        this.bp ? cssClass = `sidebar-${this.bp}-show` : cssClass = sidebarCssClasses[0];
-        ToggleClasses(cssClass, sidebarCssClasses);
+        /** @type {?} */
+        const cssClass = this.bp ? `sidebar-${this.bp}-show` : sidebarCssClasses[0];
+        this.classToggler.toggleClasses(cssClass, sidebarCssClasses);
     }
 }
 SidebarToggleDirective.decorators = [
     { type: Directive, args: [{
-                selector: '[appSidebarToggler]'
-            },] },
+                selector: '[appSidebarToggler]',
+                providers: [ClassToggler]
+            },] }
 ];
 /** @nocollapse */
-SidebarToggleDirective.ctorParameters = () => [];
+SidebarToggleDirective.ctorParameters = () => [
+    { type: ClassToggler }
+];
 SidebarToggleDirective.propDecorators = {
     breakpoint: [{ type: Input, args: ['appSidebarToggler',] }],
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
+if (false) {
+    /** @type {?} */
+    SidebarToggleDirective.prototype.breakpoint;
+    /** @type {?} */
+    SidebarToggleDirective.prototype.bp;
+    /**
+     * @type {?}
+     * @private
+     */
+    SidebarToggleDirective.prototype.classToggler;
+}
 class SidebarMinimizeDirective {
-    constructor() { }
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     */
+    constructor(document, renderer) {
+        this.document = document;
+        this.renderer = renderer;
+    }
     /**
      * @param {?} $event
      * @return {?}
      */
     toggleOpen($event) {
         $event.preventDefault();
-        document.querySelector('body').classList.toggle('sidebar-minimized');
+        /** @type {?} */
+        const body = this.document.body;
+        body.classList.contains('sidebar-minimized') ?
+            this.renderer.removeClass(body, 'sidebar-minimized') :
+            this.renderer.addClass(body, 'sidebar-minimized');
     }
 }
 SidebarMinimizeDirective.decorators = [
     { type: Directive, args: [{
                 selector: '[appSidebarMinimizer]'
-            },] },
+            },] }
 ];
 /** @nocollapse */
-SidebarMinimizeDirective.ctorParameters = () => [];
+SidebarMinimizeDirective.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 }
+];
 SidebarMinimizeDirective.propDecorators = {
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
-class MobileSidebarToggleDirective {
-    constructor() { }
+if (false) {
     /**
-     * @param {?} target
-     * @param {?} elementClassName
-     * @return {?}
+     * @type {?}
+     * @private
      */
-    hasClass(target, elementClassName) {
-        return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
+    SidebarMinimizeDirective.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    SidebarMinimizeDirective.prototype.renderer;
+}
+class MobileSidebarToggleDirective {
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     */
+    constructor(document, renderer) {
+        this.document = document;
+        this.renderer = renderer;
     }
     /**
      * @param {?} $event
@@ -116,48 +249,49 @@ class MobileSidebarToggleDirective {
      */
     toggleOpen($event) {
         $event.preventDefault();
-        document.querySelector('body').classList.toggle('sidebar-show');
+        /** @type {?} */
+        const body = this.document.body;
+        body.classList.contains('sidebar-show') ?
+            this.renderer.removeClass(body, 'sidebar-show') :
+            this.renderer.addClass(body, 'sidebar-show');
     }
 }
 MobileSidebarToggleDirective.decorators = [
     { type: Directive, args: [{
                 selector: '[appMobileSidebarToggler]'
-            },] },
+            },] }
 ];
 /** @nocollapse */
-MobileSidebarToggleDirective.ctorParameters = () => [];
+MobileSidebarToggleDirective.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 }
+];
 MobileSidebarToggleDirective.propDecorators = {
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    MobileSidebarToggleDirective.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    MobileSidebarToggleDirective.prototype.renderer;
+}
 /**
  * Allows the off-canvas sidebar to be closed via click.
  */
 class SidebarOffCanvasCloseDirective {
-    constructor() { }
     /**
-     * @param {?} target
-     * @param {?} elementClassName
-     * @return {?}
+     * @param {?} document
+     * @param {?} renderer
      */
-    hasClass(target, elementClassName) {
-        return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
-    }
-    /**
-     * @param {?} elem
-     * @param {?} elementClassName
-     * @return {?}
-     */
-    toggleClass(elem, elementClassName) {
-        let /** @type {?} */ newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
-        if (this.hasClass(elem, elementClassName)) {
-            while (newClass.indexOf(' ' + elementClassName + ' ') >= 0) {
-                newClass = newClass.replace(' ' + elementClassName + ' ', ' ');
-            }
-            elem.className = newClass.replace(/^\s+|\s+$/g, '');
-        }
-        else {
-            elem.className += ' ' + elementClassName;
-        }
+    constructor(document, renderer) {
+        this.document = document;
+        this.renderer = renderer;
     }
     /**
      * @param {?} $event
@@ -165,47 +299,97 @@ class SidebarOffCanvasCloseDirective {
      */
     toggleOpen($event) {
         $event.preventDefault();
-        if (this.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
-            this.toggleClass(document.querySelector('body'), 'sidebar-opened');
+        /** @type {?} */
+        const body = this.document.body;
+        if (body.classList.contains('sidebar-off-canvas')) {
+            body.classList.contains('sidebar-show') ?
+                this.renderer.removeClass(body, 'sidebar-show') :
+                this.renderer.addClass(body, 'sidebar-show');
         }
     }
 }
 SidebarOffCanvasCloseDirective.decorators = [
     { type: Directive, args: [{
                 selector: '[appSidebarClose]'
-            },] },
+            },] }
 ];
 /** @nocollapse */
-SidebarOffCanvasCloseDirective.ctorParameters = () => [];
+SidebarOffCanvasCloseDirective.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 }
+];
 SidebarOffCanvasCloseDirective.propDecorators = {
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SidebarOffCanvasCloseDirective.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    SidebarOffCanvasCloseDirective.prototype.renderer;
+}
 class BrandMinimizeDirective {
-    constructor() { }
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     */
+    constructor(document, renderer) {
+        this.document = document;
+        this.renderer = renderer;
+    }
     /**
      * @param {?} $event
      * @return {?}
      */
     toggleOpen($event) {
         $event.preventDefault();
-        document.querySelector('body').classList.toggle('brand-minimized');
+        /** @type {?} */
+        const body = this.document.body;
+        body.classList.contains('brand-minimized') ?
+            this.renderer.removeClass(body, 'brand-minimized') :
+            this.renderer.addClass(body, 'brand-minimized');
     }
 }
 BrandMinimizeDirective.decorators = [
     { type: Directive, args: [{
                 selector: '[appBrandMinimizer]'
-            },] },
+            },] }
 ];
 /** @nocollapse */
-BrandMinimizeDirective.ctorParameters = () => [];
+BrandMinimizeDirective.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 }
+];
 BrandMinimizeDirective.propDecorators = {
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    BrandMinimizeDirective.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    BrandMinimizeDirective.prototype.renderer;
+}
 /**
  * Allows the aside to be toggled via click.
  */
 class AsideToggleDirective {
-    constructor() { }
+    /**
+     * @param {?} classToggler
+     */
+    constructor(classToggler) {
+        this.classToggler = classToggler;
+    }
     /**
      * @return {?}
      */
@@ -218,26 +402,136 @@ class AsideToggleDirective {
      */
     toggleOpen($event) {
         $event.preventDefault();
-        let /** @type {?} */ cssClass;
-        this.bp ? cssClass = `aside-menu-${this.bp}-show` : cssClass = asideMenuCssClasses[0];
-        ToggleClasses(cssClass, asideMenuCssClasses);
+        /** @type {?} */
+        const cssClass = this.bp ? `aside-menu-${this.bp}-show` : asideMenuCssClasses[0];
+        this.classToggler.toggleClasses(cssClass, asideMenuCssClasses);
     }
 }
 AsideToggleDirective.decorators = [
     { type: Directive, args: [{
                 selector: '[appAsideMenuToggler]',
-            },] },
+                providers: [ClassToggler]
+            },] }
 ];
 /** @nocollapse */
-AsideToggleDirective.ctorParameters = () => [];
+AsideToggleDirective.ctorParameters = () => [
+    { type: ClassToggler }
+];
 AsideToggleDirective.propDecorators = {
     breakpoint: [{ type: Input, args: ['appAsideMenuToggler',] }],
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
+if (false) {
+    /** @type {?} */
+    AsideToggleDirective.prototype.breakpoint;
+    /** @type {?} */
+    AsideToggleDirective.prototype.bp;
+    /**
+     * @type {?}
+     * @private
+     */
+    AsideToggleDirective.prototype.classToggler;
+}
+class HtmlAttributesDirective {
+    /**
+     * @param {?} renderer
+     * @param {?} el
+     */
+    constructor(renderer, el) {
+        this.renderer = renderer;
+        this.el = el;
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() {
+        /** @type {?} */
+        const attribs = this.appHtmlAttr;
+        for (const attr in attribs) {
+            if (attr === 'style' && typeof (attribs[attr]) === 'object') {
+                this.setStyle(attribs[attr]);
+            }
+            else if (attr === 'class') {
+                this.addClass(attribs[attr]);
+            }
+            else {
+                this.setAttrib(attr, attribs[attr]);
+            }
+        }
+    }
+    /**
+     * @private
+     * @param {?} styles
+     * @return {?}
+     */
+    setStyle(styles) {
+        for (const style in styles) {
+            this.renderer.setStyle(this.el.nativeElement, style, styles[style]);
+        }
+    }
+    /**
+     * @private
+     * @param {?} classes
+     * @return {?}
+     */
+    addClass(classes) {
+        /** @type {?} */
+        const classArray = (Array.isArray(classes) ? classes : classes.split(' '));
+        classArray.filter((/**
+         * @param {?} element
+         * @return {?}
+         */
+        (element) => element.length > 0)).forEach((/**
+         * @param {?} element
+         * @return {?}
+         */
+        element => {
+            this.renderer.addClass(this.el.nativeElement, element);
+        }));
+    }
+    /**
+     * @private
+     * @param {?} key
+     * @param {?} value
+     * @return {?}
+     */
+    setAttrib(key, value) {
+        value !== null ?
+            this.renderer.setAttribute(this.el.nativeElement, key, value) :
+            this.renderer.removeAttribute(this.el.nativeElement, key);
+    }
+}
+HtmlAttributesDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[appHtmlAttr]'
+            },] }
+];
+/** @nocollapse */
+HtmlAttributesDirective.ctorParameters = () => [
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+HtmlAttributesDirective.propDecorators = {
+    appHtmlAttr: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    HtmlAttributesDirective.prototype.appHtmlAttr;
+    /**
+     * @type {?}
+     * @private
+     */
+    HtmlAttributesDirective.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    HtmlAttributesDirective.prototype.el;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LayoutModule {
 }
@@ -252,7 +546,8 @@ LayoutModule.decorators = [
                     MobileSidebarToggleDirective,
                     SidebarToggleDirective,
                     SidebarMinimizeDirective,
-                    SidebarOffCanvasCloseDirective
+                    SidebarOffCanvasCloseDirective,
+                    HtmlAttributesDirective
                 ],
                 declarations: [
                     AsideToggleDirective,
@@ -260,27 +555,33 @@ LayoutModule.decorators = [
                     MobileSidebarToggleDirective,
                     SidebarToggleDirective,
                     SidebarMinimizeDirective,
-                    SidebarOffCanvasCloseDirective
+                    SidebarOffCanvasCloseDirective,
+                    HtmlAttributesDirective
+                ],
+                providers: [
+                    ClassToggler
                 ]
-            },] },
+            },] }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} el
  * @return {?}
  */
 function Replace(el) {
-    const /** @type {?} */ nativeElement = el.nativeElement;
-    const /** @type {?} */ parentElement = nativeElement.parentElement;
+    /** @type {?} */
+    const nativeElement = el.nativeElement;
+    /** @type {?} */
+    const parentElement = nativeElement.parentElement;
     // move all children out of the element
     while (nativeElement.firstChild) {
         parentElement.insertBefore(nativeElement.firstChild, nativeElement);
@@ -291,81 +592,114 @@ function Replace(el) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppAsideComponent {
     /**
-     * @param {?} el
+     * @param {?} document
+     * @param {?} renderer
      */
-    constructor(el) {
-        this.el = el;
+    constructor(document, renderer) {
+        this.document = document;
+        this.renderer = renderer;
+        this.fixedClass = 'aside-menu-fixed';
+        this._aside = true;
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        Replace(this.el);
         this.isFixed(this.fixed);
+        this.isOffCanvas(this.offCanvas);
         this.displayBreakpoint(this.display);
     }
     /**
-     * @param {?} fixed
      * @return {?}
      */
-    isFixed(fixed) {
-        if (this.fixed) {
-            document.querySelector('body').classList.add('aside-menu-fixed');
+    ngOnDestroy() {
+        this.renderer.removeClass(this.document.body, this.fixedClass);
+    }
+    /**
+     * @param {?=} fixed
+     * @return {?}
+     */
+    isFixed(fixed = this.fixed) {
+        if (fixed) {
+            this.renderer.addClass(this.document.body, this.fixedClass);
         }
     }
     /**
-     * @param {?} offCanvas
+     * @param {?=} offCanvas
      * @return {?}
      */
-    isOffCanvas(offCanvas) {
-        if (this.offCanvas) {
-            document.querySelector('body').classList.add('aside-menu-off-canvas');
+    isOffCanvas(offCanvas = this.offCanvas) {
+        if (offCanvas) {
+            this.renderer.addClass(this.document.body, 'aside-menu-off-canvas');
         }
     }
     /**
-     * @param {?} display
+     * @param {?=} display
      * @return {?}
      */
-    displayBreakpoint(display) {
-        if (this.display !== false) {
-            let /** @type {?} */ cssClass;
-            this.display ? cssClass = `aside-menu-${this.display}-show` : cssClass = asideMenuCssClasses[0];
-            document.querySelector('body').classList.add(cssClass);
+    displayBreakpoint(display = this.display) {
+        if (display !== false) {
+            /** @type {?} */
+            const cssClass = this.display ? `aside-menu-${this.display}-show` : asideMenuCssClasses[0];
+            this.renderer.addClass(this.document.body, cssClass);
         }
     }
 }
 AppAsideComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-aside',
-                template: `
-    <aside class="aside-menu">
-      <ng-content></ng-content>
-    </aside>
-  `
-            },] },
+                selector: 'app-aside, cui-aside',
+                template: `<ng-content></ng-content>`
+            }] }
 ];
 /** @nocollapse */
 AppAsideComponent.ctorParameters = () => [
-    { type: ElementRef }
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 }
 ];
 AppAsideComponent.propDecorators = {
     display: [{ type: Input }],
     fixed: [{ type: Input }],
-    offCanvas: [{ type: Input }]
+    offCanvas: [{ type: Input }],
+    _aside: [{ type: HostBinding, args: ['class.aside-menu',] }]
 };
+if (false) {
+    /** @type {?} */
+    AppAsideComponent.prototype.display;
+    /** @type {?} */
+    AppAsideComponent.prototype.fixed;
+    /** @type {?} */
+    AppAsideComponent.prototype.offCanvas;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppAsideComponent.prototype.fixedClass;
+    /** @type {?} */
+    AppAsideComponent.prototype._aside;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppAsideComponent.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppAsideComponent.prototype.renderer;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppAsideModule {
 }
@@ -382,17 +716,22 @@ AppAsideModule.decorators = [
                 declarations: [
                     AppAsideComponent
                 ]
-            },] },
+            },] }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppBreadcrumbService {
     /**
@@ -404,52 +743,100 @@ class AppBreadcrumbService {
         this.route = route;
         this._breadcrumbs = new BehaviorSubject(new Array());
         this.breadcrumbs = this._breadcrumbs.asObservable();
-        this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
-            const /** @type {?} */ breadcrumbs = [];
-            let /** @type {?} */ currentRoute = this.route.root, /** @type {?} */
-            url = '';
+        this.router.events.pipe(filter((/**
+         * @param {?} event
+         * @return {?}
+         */
+        event => event instanceof NavigationEnd))).subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => {
+            /** @type {?} */
+            const breadcrumbs = [];
+            /** @type {?} */
+            let currentRoute = this.route.root;
+            /** @type {?} */
+            let url = '';
             do {
-                const /** @type {?} */ childrenRoutes = currentRoute.children;
+                /** @type {?} */
+                const childrenRoutes = currentRoute.children;
                 currentRoute = null;
                 // tslint:disable-next-line:no-shadowed-variable
-                childrenRoutes.forEach(route => {
+                childrenRoutes.forEach((/**
+                 * @param {?} route
+                 * @return {?}
+                 */
+                route => {
                     if (route.outlet === 'primary') {
-                        const /** @type {?} */ routeSnapshot = route.snapshot;
-                        url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
+                        /** @type {?} */
+                        const routeSnapshot = route.snapshot;
+                        url += '/' + routeSnapshot.url.map((/**
+                         * @param {?} segment
+                         * @return {?}
+                         */
+                        segment => segment.path)).join('/');
                         breadcrumbs.push({
                             label: route.snapshot.data,
                             url: url
                         });
                         currentRoute = route;
                     }
-                });
+                }));
             } while (currentRoute);
             this._breadcrumbs.next(Object.assign([], breadcrumbs));
             return breadcrumbs;
-        });
+        }));
     }
 }
 AppBreadcrumbService.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{
+                providedIn: 'root'
+            },] }
 ];
 /** @nocollapse */
 AppBreadcrumbService.ctorParameters = () => [
     { type: Router },
     { type: ActivatedRoute }
 ];
+/** @nocollapse */ AppBreadcrumbService.ngInjectableDef = ɵɵdefineInjectable({ factory: function AppBreadcrumbService_Factory() { return new AppBreadcrumbService(ɵɵinject(Router), ɵɵinject(ActivatedRoute)); }, token: AppBreadcrumbService, providedIn: "root" });
+if (false) {
+    /** @type {?} */
+    AppBreadcrumbService.prototype.breadcrumbs;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppBreadcrumbService.prototype._breadcrumbs;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppBreadcrumbService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppBreadcrumbService.prototype.route;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppBreadcrumbComponent {
     /**
+     * @param {?} document
+     * @param {?} renderer
      * @param {?} service
      * @param {?} el
      */
-    constructor(service, el) {
+    constructor(document, renderer, service, el) {
+        this.document = document;
+        this.renderer = renderer;
         this.service = service;
         this.el = el;
+        this.fixedClass = 'breadcrumb-fixed';
     }
     /**
      * @return {?}
@@ -460,12 +847,18 @@ class AppBreadcrumbComponent {
         this.breadcrumbs = this.service.breadcrumbs;
     }
     /**
-     * @param {?} fixed
      * @return {?}
      */
-    isFixed(fixed) {
-        if (this.fixed) {
-            document.querySelector('body').classList.add('breadcrumb-fixed');
+    ngOnDestroy() {
+        this.renderer.removeClass(this.document.body, this.fixedClass);
+    }
+    /**
+     * @param {?=} fixed
+     * @return {?}
+     */
+    isFixed(fixed = this.fixed) {
+        if (fixed) {
+            this.renderer.addClass(this.document.body, this.fixedClass);
         }
     }
 }
@@ -482,21 +875,128 @@ AppBreadcrumbComponent.decorators = [
       </li>
     </ng-template>
   `
-            },] },
+            }] }
 ];
 /** @nocollapse */
 AppBreadcrumbComponent.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 },
     { type: AppBreadcrumbService },
     { type: ElementRef }
 ];
 AppBreadcrumbComponent.propDecorators = {
     fixed: [{ type: Input }]
 };
+if (false) {
+    /** @type {?} */
+    AppBreadcrumbComponent.prototype.fixed;
+    /** @type {?} */
+    AppBreadcrumbComponent.prototype.breadcrumbs;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppBreadcrumbComponent.prototype.fixedClass;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppBreadcrumbComponent.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppBreadcrumbComponent.prototype.renderer;
+    /** @type {?} */
+    AppBreadcrumbComponent.prototype.service;
+    /** @type {?} */
+    AppBreadcrumbComponent.prototype.el;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class CuiBreadcrumbComponent {
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     * @param {?} service
+     */
+    constructor(document, renderer, service) {
+        this.document = document;
+        this.renderer = renderer;
+        this.service = service;
+        this.fixedClass = 'breadcrumb-fixed';
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() {
+        this.isFixed(this.fixed);
+        this.breadcrumbs = this.service.breadcrumbs;
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this.renderer.removeClass(this.document.body, this.fixedClass);
+    }
+    /**
+     * @param {?=} fixed
+     * @return {?}
+     */
+    isFixed(fixed = this.fixed) {
+        if (fixed) {
+            this.renderer.addClass(this.document.body, this.fixedClass);
+        }
+    }
+}
+CuiBreadcrumbComponent.decorators = [
+    { type: Component, args: [{
+                // tslint:disable-next-line:component-selector
+                selector: 'cui-breadcrumb',
+                template: "<ol class=\"breadcrumb\">\r\n  <ng-template ngFor let-breadcrumb [ngForOf]=\"breadcrumbs | async\" let-last = last>\r\n    <li class=\"breadcrumb-item\"\r\n        *ngIf=\"breadcrumb.label.title && (breadcrumb.url.slice(-1) == '/' || last)\"\r\n        [ngClass]=\"{active: last}\">\r\n      <a *ngIf=\"!last\" [routerLink]=\"breadcrumb.url\">{{breadcrumb.label.title}}</a>\r\n      <span *ngIf=\"last\" [routerLink]=\"breadcrumb.url\">{{breadcrumb.label.title}}</span>\r\n    </li>\r\n  </ng-template>\r\n  <ng-content></ng-content>\r\n</ol>\r\n"
+            }] }
+];
+/** @nocollapse */
+CuiBreadcrumbComponent.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 },
+    { type: AppBreadcrumbService }
+];
+CuiBreadcrumbComponent.propDecorators = {
+    fixed: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    CuiBreadcrumbComponent.prototype.fixed;
+    /** @type {?} */
+    CuiBreadcrumbComponent.prototype.breadcrumbs;
+    /**
+     * @type {?}
+     * @private
+     */
+    CuiBreadcrumbComponent.prototype.fixedClass;
+    /**
+     * @type {?}
+     * @private
+     */
+    CuiBreadcrumbComponent.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    CuiBreadcrumbComponent.prototype.renderer;
+    /** @type {?} */
+    CuiBreadcrumbComponent.prototype.service;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+// @dynamic
 class AppBreadcrumbModule {
     /**
      * @param {?=} config
@@ -514,65 +1014,98 @@ class AppBreadcrumbModule {
 AppBreadcrumbModule.decorators = [
     { type: NgModule, args: [{
                 imports: [CommonModule, RouterModule],
-                exports: [AppBreadcrumbComponent],
-                declarations: [AppBreadcrumbComponent]
-            },] },
+                exports: [AppBreadcrumbComponent, CuiBreadcrumbComponent],
+                declarations: [AppBreadcrumbComponent, CuiBreadcrumbComponent]
+            },] }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppFooterComponent {
     /**
-     * @param {?} el
+     * @param {?} document
+     * @param {?} renderer
      */
-    constructor(el) {
-        this.el = el;
+    constructor(document, renderer) {
+        this.document = document;
+        this.renderer = renderer;
+        this.fixedClass = 'footer-fixed';
+        this._footer = true;
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        Replace(this.el);
         this.isFixed(this.fixed);
     }
     /**
-     * @param {?} fixed
      * @return {?}
      */
-    isFixed(fixed) {
-        if (this.fixed) {
-            document.querySelector('body').classList.add('footer-fixed');
+    ngOnDestroy() {
+        this.renderer.removeClass(this.document.body, this.fixedClass);
+    }
+    /**
+     * @param {?=} fixed
+     * @return {?}
+     */
+    isFixed(fixed = this.fixed) {
+        if (fixed) {
+            this.renderer.addClass(this.document.body, this.fixedClass);
         }
     }
 }
 AppFooterComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-footer',
-                template: `
-    <footer class="app-footer">
-      <ng-content></ng-content>
-    </footer>
-  `
-            },] },
+                selector: 'app-footer, cui-footer',
+                template: `<ng-content></ng-content>`
+            }] }
 ];
 /** @nocollapse */
 AppFooterComponent.ctorParameters = () => [
-    { type: ElementRef }
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 }
 ];
 AppFooterComponent.propDecorators = {
-    fixed: [{ type: Input }]
+    fixed: [{ type: Input }],
+    _footer: [{ type: HostBinding, args: ['class.app-footer',] }]
 };
+if (false) {
+    /** @type {?} */
+    AppFooterComponent.prototype.fixed;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppFooterComponent.prototype.fixedClass;
+    /** @type {?} */
+    AppFooterComponent.prototype._footer;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppFooterComponent.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppFooterComponent.prototype.renderer;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppFooterModule {
 }
@@ -581,148 +1114,185 @@ AppFooterModule.decorators = [
                 imports: [CommonModule],
                 exports: [AppFooterComponent],
                 declarations: [AppFooterComponent]
-            },] },
+            },] }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppHeaderComponent {
     /**
-     * @param {?} el
+     * @param {?} document
+     * @param {?} renderer
      */
-    constructor(el) {
-        this.el = el;
+    constructor(document, renderer) {
+        this.document = document;
+        this.renderer = renderer;
+        this.navbarBrandText = { icon: '🅲', text: '🅲 CoreUI' };
+        // deprecated, use navbarBrandRouterLink instead
+        this.navbarBrandRouterLink = '';
+        this.fixedClass = 'header-fixed';
+        this._header = true;
+        this._navbar = true;
+        this.breakpoints = ['xl', 'lg', 'md', 'sm', 'xs'];
+        this.sidebarTogglerClass = 'd-none d-md-block';
+        this.sidebarTogglerMobileClass = 'd-lg-none';
+        this.asideTogglerClass = 'd-none d-md-block';
+        this.asideTogglerMobileClass = 'd-lg-none';
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        Replace(this.el);
         this.isFixed(this.fixed);
+        this.navbarBrandImg = Boolean(this.navbarBrand || this.navbarBrandFull || this.navbarBrandMinimized);
+        this.navbarBrandRouterLink = this.navbarBrandRouterLink[0] ? this.navbarBrandRouterLink : this.navbarBrandHref;
+        this.sidebarTogglerClass = this.setToggerBreakpointClass((/** @type {?} */ (this.sidebarToggler)));
+        this.sidebarTogglerMobileClass = this.setToggerMobileBreakpointClass((/** @type {?} */ (this.sidebarToggler)));
+        this.asideTogglerClass = this.setToggerBreakpointClass((/** @type {?} */ (this.asideMenuToggler)));
+        this.asideTogglerMobileClass = this.setToggerMobileBreakpointClass((/** @type {?} */ (this.asideMenuToggler)));
     }
     /**
-     * @param {?} fixed
      * @return {?}
      */
-    isFixed(fixed) {
-        if (this.fixed) {
-            document.querySelector('body').classList.add('header-fixed');
+    ngOnDestroy() {
+        this.renderer.removeClass(this.document.body, this.fixedClass);
+    }
+    /**
+     * @param {?=} fixed
+     * @return {?}
+     */
+    isFixed(fixed = this.fixed) {
+        if (fixed) {
+            this.renderer.addClass(this.document.body, this.fixedClass);
         }
     }
     /**
-     * @param {?} brand
+     * @param {?=} breakpoint
      * @return {?}
      */
-    imgSrc(brand) {
-        return brand.src ? brand.src : '';
+    setToggerBreakpointClass(breakpoint = 'md') {
+        /** @type {?} */
+        let togglerClass = 'd-none d-md-block';
+        if (this.breakpoints.includes(breakpoint)) {
+            /** @type {?} */
+            const breakpointIndex = this.breakpoints.indexOf(breakpoint);
+            togglerClass = `d-none d-${breakpoint}-block`;
+        }
+        return togglerClass;
     }
     /**
-     * @param {?} brand
+     * @param {?=} breakpoint
      * @return {?}
      */
-    imgWidth(brand) {
-        return brand.width ? brand.width : 'auto';
-    }
-    /**
-     * @param {?} brand
-     * @return {?}
-     */
-    imgHeight(brand) {
-        return brand.height ? brand.height : 'auto';
-    }
-    /**
-     * @param {?} brand
-     * @return {?}
-     */
-    imgAlt(brand) {
-        return brand.alt ? brand.alt : '';
-    }
-    /**
-     * @param {?} breakpoint
-     * @return {?}
-     */
-    breakpoint(breakpoint) {
-        console.log(breakpoint);
-        return breakpoint ? breakpoint : '';
+    setToggerMobileBreakpointClass(breakpoint = 'lg') {
+        /** @type {?} */
+        let togglerClass = 'd-lg-none';
+        if (this.breakpoints.includes(breakpoint)) {
+            togglerClass = `d-${breakpoint}-none`;
+        }
+        return togglerClass;
     }
 }
 AppHeaderComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-header',
-                template: `
-    <header class="app-header navbar">
-      <ng-template [ngIf]="mobileSidebarToggler != false">
-        <button class="navbar-toggler d-lg-none" type="button" appSidebarToggler>
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
-      <ng-template [ngIf]="navbarBrand || navbarBrandFull || navbarBrandMinimized">
-        <a class="navbar-brand" href="#">
-          <img *ngIf="navbarBrand"
-               [src]="imgSrc(navbarBrand)"
-               [attr.width]="imgWidth(navbarBrand)"
-               [attr.height]="imgHeight(navbarBrand)"
-               [attr.alt]="imgAlt(navbarBrand)"
-               class="navbar-brand">
-          <img *ngIf="navbarBrandFull"
-               [src]="imgSrc(navbarBrandFull)"
-               [attr.width]="imgWidth(navbarBrandFull)"
-               [attr.height]="imgHeight(navbarBrandFull)"
-               [attr.alt]="imgAlt(navbarBrandFull)"
-               class="navbar-brand-full">
-          <img *ngIf="navbarBrandMinimized"
-               [src]="imgSrc(navbarBrandMinimized)"
-               [attr.width]="imgWidth(navbarBrandMinimized)"
-               [attr.height]="imgHeight(navbarBrandMinimized)"
-               [attr.alt]="imgAlt(navbarBrandMinimized)"
-               class="navbar-brand-minimized">
-        </a>
-      </ng-template>
-      <ng-template [ngIf]="sidebarToggler != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [appSidebarToggler]="sidebarToggler">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
-      <ng-content></ng-content>
-      <ng-template [ngIf]="asideMenuToggler != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [appAsideMenuToggler]="asideMenuToggler">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
-      <ng-template [ngIf]="mobileAsideMenuToggler != false">
-        <button class="navbar-toggler d-lg-none" type="button" appAsideMenuToggler>
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
-    </header>
-  `
-            },] },
+                selector: 'app-header, cui-header',
+                template: "<ng-template [ngIf]=\"mobileSidebarToggler != false\">\r\n  <button class=\"navbar-toggler {{sidebarTogglerMobileClass}}\" type=\"button\" appSidebarToggler>\r\n    <span class=\"navbar-toggler-icon\"></span>\r\n  </button>\r\n</ng-template>\r\n<a class=\"navbar-brand\" [routerLink]=\"navbarBrandRouterLink\">\r\n  <ng-template [ngIf]=\"navbarBrandImg\">\r\n    <img *ngIf=\"navbarBrand\"\r\n         [appHtmlAttr]=\"navbarBrand\"\r\n         [ngClass]=\"'navbar-brand'\">\r\n    <img *ngIf=\"navbarBrandFull\"\r\n         [appHtmlAttr]=\"navbarBrandFull\"\r\n         [ngClass]=\"'navbar-brand-full'\">\r\n    <img *ngIf=\"navbarBrandMinimized\"\r\n         [appHtmlAttr]=\"navbarBrandMinimized\"\r\n         [ngClass]=\"'navbar-brand-minimized'\">\r\n  </ng-template>\r\n  <ng-template [ngIf]=\"!navbarBrandImg\">\r\n    <div class=\"navbar-brand-full\" [innerHTML]=\"navbarBrandText.text\"></div>\r\n    <div class=\"navbar-brand-minimized\" [innerHTML]=\"navbarBrandText.icon\"></div>\r\n  </ng-template>\r\n</a>\r\n<ng-template [ngIf]=\"sidebarToggler != false\">\r\n  <button class=\"navbar-toggler {{sidebarTogglerClass}}\" type=\"button\" [appSidebarToggler]=\"sidebarToggler\">\r\n    <span class=\"navbar-toggler-icon\"></span>\r\n  </button>\r\n</ng-template>\r\n<ng-content></ng-content>\r\n<ng-template [ngIf]=\"asideMenuToggler != false\">\r\n  <button class=\"navbar-toggler {{asideTogglerClass}}\" type=\"button\" [appAsideMenuToggler]=\"asideMenuToggler\">\r\n    <span class=\"navbar-toggler-icon\"></span>\r\n  </button>\r\n</ng-template>\r\n<ng-template [ngIf]=\"mobileAsideMenuToggler != false\">\r\n  <button class=\"navbar-toggler {{asideTogglerMobileClass}}\" type=\"button\" appAsideMenuToggler>\r\n    <span class=\"navbar-toggler-icon\"></span>\r\n  </button>\r\n</ng-template>\r\n"
+            }] }
 ];
 /** @nocollapse */
 AppHeaderComponent.ctorParameters = () => [
-    { type: ElementRef }
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 }
 ];
 AppHeaderComponent.propDecorators = {
     fixed: [{ type: Input }],
     navbarBrand: [{ type: Input }],
     navbarBrandFull: [{ type: Input }],
     navbarBrandMinimized: [{ type: Input }],
+    navbarBrandText: [{ type: Input }],
+    navbarBrandHref: [{ type: Input }],
+    navbarBrandRouterLink: [{ type: Input }],
     sidebarToggler: [{ type: Input }],
     mobileSidebarToggler: [{ type: Input }],
     asideMenuToggler: [{ type: Input }],
-    mobileAsideMenuToggler: [{ type: Input }]
+    mobileAsideMenuToggler: [{ type: Input }],
+    _header: [{ type: HostBinding, args: ['class.app-header',] }],
+    _navbar: [{ type: HostBinding, args: ['class.navbar',] }]
 };
+if (false) {
+    /** @type {?} */
+    AppHeaderComponent.prototype.fixed;
+    /** @type {?} */
+    AppHeaderComponent.prototype.navbarBrand;
+    /** @type {?} */
+    AppHeaderComponent.prototype.navbarBrandFull;
+    /** @type {?} */
+    AppHeaderComponent.prototype.navbarBrandMinimized;
+    /** @type {?} */
+    AppHeaderComponent.prototype.navbarBrandText;
+    /** @type {?} */
+    AppHeaderComponent.prototype.navbarBrandHref;
+    /** @type {?} */
+    AppHeaderComponent.prototype.navbarBrandRouterLink;
+    /** @type {?} */
+    AppHeaderComponent.prototype.sidebarToggler;
+    /** @type {?} */
+    AppHeaderComponent.prototype.mobileSidebarToggler;
+    /** @type {?} */
+    AppHeaderComponent.prototype.asideMenuToggler;
+    /** @type {?} */
+    AppHeaderComponent.prototype.mobileAsideMenuToggler;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppHeaderComponent.prototype.fixedClass;
+    /** @type {?} */
+    AppHeaderComponent.prototype._header;
+    /** @type {?} */
+    AppHeaderComponent.prototype._navbar;
+    /** @type {?} */
+    AppHeaderComponent.prototype.navbarBrandImg;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppHeaderComponent.prototype.breakpoints;
+    /** @type {?} */
+    AppHeaderComponent.prototype.sidebarTogglerClass;
+    /** @type {?} */
+    AppHeaderComponent.prototype.sidebarTogglerMobileClass;
+    /** @type {?} */
+    AppHeaderComponent.prototype.asideTogglerClass;
+    /** @type {?} */
+    AppHeaderComponent.prototype.asideTogglerMobileClass;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppHeaderComponent.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppHeaderComponent.prototype.renderer;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppHeaderModule {
 }
@@ -730,6 +1300,7 @@ AppHeaderModule.decorators = [
     { type: NgModule, args: [{
                 imports: [
                     CommonModule,
+                    RouterModule,
                     LayoutModule
                 ],
                 exports: [
@@ -739,149 +1310,103 @@ AppHeaderModule.decorators = [
                 declarations: [
                     AppHeaderComponent
                 ]
-            },] },
+            },] }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class AppSidebarFooterComponent {
-    /**
-     * @param {?} el
-     */
-    constructor(el) {
-        this.el = el;
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function ISidebarAction() { }
+if (false) {
+    /** @type {?|undefined} */
+    ISidebarAction.prototype.minimize;
+}
+class AppSidebarService {
+    constructor() {
+        this.events = new BehaviorSubject({});
+        this.events$ = this.events.asObservable();
     }
     /**
+     * @param {?} action
      * @return {?}
      */
-    ngOnInit() {
-        Replace(this.el);
+    toggle(action) {
+        this.events.next(action);
     }
 }
-AppSidebarFooterComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-footer',
-                template: `
-    <div class="sidebar-footer">
-      <ng-content></ng-content>
-    </div>`
-            },] },
+AppSidebarService.decorators = [
+    { type: Injectable, args: [{
+                providedIn: 'root'
+            },] }
 ];
 /** @nocollapse */
-AppSidebarFooterComponent.ctorParameters = () => [
-    { type: ElementRef }
-];
+AppSidebarService.ctorParameters = () => [];
+/** @nocollapse */ AppSidebarService.ngInjectableDef = ɵɵdefineInjectable({ factory: function AppSidebarService_Factory() { return new AppSidebarService(); }, token: AppSidebarService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarService.prototype.events;
+    /** @type {?} */
+    AppSidebarService.prototype.events$;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-class AppSidebarFormComponent {
-    /**
-     * @param {?} el
-     */
-    constructor(el) {
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarFormComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-form',
-                template: `
-    <form class="sidebar-form">
-      <ng-content></ng-content>
-    </form>
-  `
-            },] },
-];
-/** @nocollapse */
-AppSidebarFormComponent.ctorParameters = () => [
-    { type: ElementRef }
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-class AppSidebarHeaderComponent {
-    /**
-     * @param {?} el
-     */
-    constructor(el) {
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarHeaderComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-header',
-                template: `
-    <div class="sidebar-header">
-      <ng-content></ng-content>
-    </div>
-  `
-            },] },
-];
-/** @nocollapse */
-AppSidebarHeaderComponent.ctorParameters = () => [
-    { type: ElementRef }
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-class AppSidebarMinimizerComponent {
-    /**
-     * @param {?} el
-     */
-    constructor(el) {
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
-}
-AppSidebarMinimizerComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-minimizer',
-                template: `
-    <button class="sidebar-minimizer" type="button" appSidebarMinimizer appBrandMinimizer></button>
-  `
-            },] },
-];
-/** @nocollapse */
-AppSidebarMinimizerComponent.ctorParameters = () => [
-    { type: ElementRef }
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppSidebarComponent {
-    constructor() { }
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     * @param {?} sidebarService
+     */
+    constructor(document, renderer, sidebarService) {
+        this.document = document;
+        this.renderer = renderer;
+        this.sidebarService = sidebarService;
+        this._minimized = false;
+        /**
+         * Emits whenever the minimized state of the sidebar changes.
+         * Primarily used to facilitate two-way binding.
+         */
+        this.minimizedChange = new EventEmitter();
+        this._sidebar = true;
+    }
+    /**
+     * @return {?}
+     */
+    get minimized() {
+        return this._minimized;
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set minimized(value) {
+        // only update / emit events when the value changes
+        if (this._minimized !== value) {
+            this._minimized = value;
+            this._updateMinimized(value);
+            this.minimizedChange.emit(value);
+            this.sidebarService.toggle({ minimize: value });
+        }
+    }
     /**
      * @return {?}
      */
@@ -889,86 +1414,281 @@ class AppSidebarComponent {
         this.displayBreakpoint(this.display);
         this.isCompact(this.compact);
         this.isFixed(this.fixed);
-        this.isMinimized(this.minimized);
         this.isOffCanvas(this.offCanvas);
+        this.sidebarService.toggle({ minimize: this.minimized });
+        this.subscriptionEvents = this.sidebarService.events$.subscribe((/**
+         * @param {?} action
+         * @return {?}
+         */
+        action => {
+            if (action.minimize !== undefined) {
+                action.minimize === 'toggle' ? this.toggleMinimized() : this.minimized = !!action.minimize;
+            }
+        }));
     }
     /**
-     * @param {?} compact
      * @return {?}
      */
-    isCompact(compact) {
-        if (this.compact) {
-            document.querySelector('body').classList.add('sidebar-compact');
+    ngOnDestroy() {
+        this.subscriptionEvents.unsubscribe();
+        this.minimizedChange.complete();
+        this.renderer.removeClass(this.document.body, 'sidebar-fixed');
+        this._updateMinimized(false);
+    }
+    /**
+     * @param {?=} compact
+     * @return {?}
+     */
+    isCompact(compact = this.compact) {
+        if (compact) {
+            this.renderer.addClass(this.document.body, 'sidebar-compact');
         }
     }
     /**
-     * @param {?} fixed
+     * @param {?=} fixed
      * @return {?}
      */
-    isFixed(fixed) {
-        if (this.fixed) {
-            document.querySelector('body').classList.add('sidebar-fixed');
+    isFixed(fixed = this.fixed) {
+        if (fixed) {
+            this.renderer.addClass(this.document.body, 'sidebar-fixed');
         }
     }
     /**
+     * @return {?}
+     */
+    toggleMinimized() {
+        this.minimized = !this._minimized;
+    }
+    /**
+     * @param {?=} offCanvas
+     * @return {?}
+     */
+    isOffCanvas(offCanvas = this.offCanvas) {
+        if (offCanvas) {
+            this.renderer.addClass(this.document.body, 'sidebar-off-canvas');
+        }
+    }
+    /**
+     * @param {?=} display
+     * @return {?}
+     */
+    displayBreakpoint(display = this.display) {
+        if (display !== false) {
+            /** @type {?} */
+            const cssClass = display ? `sidebar-${display}-show` : sidebarCssClasses[0];
+            this.renderer.addClass(this.document.body, cssClass);
+        }
+    }
+    /**
+     * @private
      * @param {?} minimized
      * @return {?}
      */
-    isMinimized(minimized) {
-        if (this.minimized) {
-            document.querySelector('body').classList.add('sidebar-minimized');
+    _updateMinimized(minimized) {
+        /** @type {?} */
+        const body = this.document.body;
+        if (minimized) {
+            this.renderer.addClass(body, 'sidebar-minimized');
+            this.renderer.addClass(body, 'brand-minimized');
         }
-    }
-    /**
-     * @param {?} offCanvas
-     * @return {?}
-     */
-    isOffCanvas(offCanvas) {
-        if (this.offCanvas) {
-            document.querySelector('body').classList.add('sidebar-off-canvas');
-        }
-    }
-    /**
-     * @param {?} fixed
-     * @return {?}
-     */
-    fixedPosition(fixed) {
-        if (this.fixed) {
-            document.querySelector('body').classList.add('sidebar-fixed');
-        }
-    }
-    /**
-     * @param {?} display
-     * @return {?}
-     */
-    displayBreakpoint(display) {
-        if (this.display !== false) {
-            let /** @type {?} */ cssClass;
-            this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
-            document.querySelector('body').classList.add(cssClass);
+        else {
+            this.renderer.removeClass(body, 'sidebar-minimized');
+            this.renderer.removeClass(body, 'brand-minimized');
         }
     }
 }
 AppSidebarComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-sidebar',
+                selector: 'app-sidebar, cui-sidebar',
                 template: `<ng-content></ng-content>`
-            },] },
+            }] }
 ];
 /** @nocollapse */
-AppSidebarComponent.ctorParameters = () => [];
+AppSidebarComponent.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 },
+    { type: AppSidebarService }
+];
 AppSidebarComponent.propDecorators = {
     compact: [{ type: Input }],
     display: [{ type: Input }],
     fixed: [{ type: Input }],
-    minimized: [{ type: Input }],
     offCanvas: [{ type: Input }],
-    true: [{ type: HostBinding, args: ['class.sidebar',] }]
+    minimized: [{ type: Input }],
+    minimizedChange: [{ type: Output }],
+    _sidebar: [{ type: HostBinding, args: ['class.sidebar',] }]
 };
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarComponent.prototype.subscriptionEvents;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarComponent.prototype._minimized;
+    /** @type {?} */
+    AppSidebarComponent.prototype.compact;
+    /** @type {?} */
+    AppSidebarComponent.prototype.display;
+    /** @type {?} */
+    AppSidebarComponent.prototype.fixed;
+    /** @type {?} */
+    AppSidebarComponent.prototype.offCanvas;
+    /**
+     * Emits whenever the minimized state of the sidebar changes.
+     * Primarily used to facilitate two-way binding.
+     * @type {?}
+     */
+    AppSidebarComponent.prototype.minimizedChange;
+    /** @type {?} */
+    AppSidebarComponent.prototype._sidebar;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarComponent.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarComponent.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarComponent.prototype.sidebarService;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarFooterComponent {
+    constructor() {
+        this._sidebarFooter = true;
+    }
+}
+AppSidebarFooterComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-footer, cui-sidebar-footer',
+                template: `<ng-content></ng-content>`
+            }] }
+];
+/** @nocollapse */
+AppSidebarFooterComponent.ctorParameters = () => [];
+AppSidebarFooterComponent.propDecorators = {
+    _sidebarFooter: [{ type: HostBinding, args: ['class.sidebar-footer',] }]
+};
+if (false) {
+    /** @type {?} */
+    AppSidebarFooterComponent.prototype._sidebarFooter;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarFormComponent {
+    constructor() {
+        this._sidebarForm = true;
+    }
+}
+AppSidebarFormComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-form, cui-sidebar-form',
+                template: `<ng-content></ng-content>`
+            }] }
+];
+/** @nocollapse */
+AppSidebarFormComponent.ctorParameters = () => [];
+AppSidebarFormComponent.propDecorators = {
+    _sidebarForm: [{ type: HostBinding, args: ['class.sidebar-form',] }]
+};
+if (false) {
+    /** @type {?} */
+    AppSidebarFormComponent.prototype._sidebarForm;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarHeaderComponent {
+    constructor() {
+        this._sidebarHeader = true;
+    }
+}
+AppSidebarHeaderComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-header, cui-sidebar-header',
+                template: `<ng-content></ng-content>`
+            }] }
+];
+/** @nocollapse */
+AppSidebarHeaderComponent.ctorParameters = () => [];
+AppSidebarHeaderComponent.propDecorators = {
+    _sidebarHeader: [{ type: HostBinding, args: ['class.sidebar-header',] }]
+};
+if (false) {
+    /** @type {?} */
+    AppSidebarHeaderComponent.prototype._sidebarHeader;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarMinimizerComponent {
+    /**
+     * @param {?} sidebarService
+     */
+    constructor(sidebarService) {
+        this.sidebarService = sidebarService;
+        this.role = 'button';
+        this._minimizer = true;
+    }
+    /**
+     * @param {?} $event
+     * @return {?}
+     */
+    toggleOpen($event) {
+        $event.preventDefault();
+        this.sidebarService.toggle({ minimize: 'toggle' });
+    }
+}
+AppSidebarMinimizerComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-minimizer, cui-sidebar-minimizer',
+                template: ``
+            }] }
+];
+/** @nocollapse */
+AppSidebarMinimizerComponent.ctorParameters = () => [
+    { type: AppSidebarService }
+];
+AppSidebarMinimizerComponent.propDecorators = {
+    role: [{ type: HostBinding, args: ['attr.role',] }, { type: Input }],
+    _minimizer: [{ type: HostBinding, args: ['class.sidebar-minimizer',] }],
+    toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
+};
+if (false) {
+    /** @type {?} */
+    AppSidebarMinimizerComponent.prototype.role;
+    /** @type {?} */
+    AppSidebarMinimizerComponent.prototype._minimizer;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarMinimizerComponent.prototype.sidebarService;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class NavDropdownDirective {
     /**
@@ -987,12 +1707,19 @@ class NavDropdownDirective {
 NavDropdownDirective.decorators = [
     { type: Directive, args: [{
                 selector: '[appNavDropdown]'
-            },] },
+            },] }
 ];
 /** @nocollapse */
 NavDropdownDirective.ctorParameters = () => [
     { type: ElementRef }
 ];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    NavDropdownDirective.prototype.el;
+}
 /**
  * Allows the dropdown to be toggled via click.
  */
@@ -1015,7 +1742,7 @@ class NavDropdownToggleDirective {
 NavDropdownToggleDirective.decorators = [
     { type: Directive, args: [{
                 selector: '[appNavDropdownToggle]'
-            },] },
+            },] }
 ];
 /** @nocollapse */
 NavDropdownToggleDirective.ctorParameters = () => [
@@ -1024,248 +1751,519 @@ NavDropdownToggleDirective.ctorParameters = () => [
 NavDropdownToggleDirective.propDecorators = {
     toggleOpen: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    NavDropdownToggleDirective.prototype.dropdown;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class AppSidebarNavComponent {
-    constructor() {
+    /**
+     * @param {?} router
+     */
+    constructor(router) {
+        this.router = router;
+        this.navItems = [];
+        this._sidebarBav = true;
         this.role = 'nav';
+        this.navItemsArray = [];
     }
     /**
-     * @param {?} item
+     * @param {?} changes
      * @return {?}
      */
-    isDivider(item) {
-        return item.divider ? true : false;
-    }
-    /**
-     * @param {?} item
-     * @return {?}
-     */
-    isTitle(item) {
-        return item.title ? true : false;
+    ngOnChanges(changes) {
+        this.navItemsArray = Array.isArray(this.navItems) ? this.navItems.slice() : [];
     }
 }
 AppSidebarNavComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-sidebar-nav',
-                template: `
-    <ul class="nav">
-      <ng-template ngFor let-navitem [ngForOf]="navItems">
-        <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
-        <ng-template [ngIf]="isTitle(navitem)">
-          <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>
-        </ng-template>
-        <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)">
-          <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>
-        </ng-template>
-      </ng-template>
-    </ul>`
-            },] },
+                selector: 'app-sidebar-nav, cui-sidebar-nav',
+                template: "<app-sidebar-nav-items\n  class=\"nav\"\n  [items]=\"navItemsArray\">\n</app-sidebar-nav-items>\n"
+            }] }
 ];
 /** @nocollapse */
-AppSidebarNavComponent.ctorParameters = () => [];
+AppSidebarNavComponent.ctorParameters = () => [
+    { type: Router }
+];
 AppSidebarNavComponent.propDecorators = {
     navItems: [{ type: Input }],
-    true: [{ type: HostBinding, args: ['class.sidebar-nav',] }],
-    role: [{ type: HostBinding, args: ['attr.role',] }]
+    _sidebarBav: [{ type: HostBinding, args: ['class.sidebar-nav',] }],
+    role: [{ type: HostBinding, args: ['attr.role',] }, { type: Input }]
 };
-class AppSidebarNavItemComponent {
-    /**
-     * @param {?} router
-     * @param {?} el
-     */
-    constructor(router, el) {
-        this.router = router;
-        this.el = el;
-    }
-    /**
-     * @return {?}
-     */
-    hasClass() {
-        return this.item.class ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    isDropdown() {
-        return this.item.children ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    thisUrl() {
-        return this.item.url;
-    }
-    /**
-     * @return {?}
-     */
-    isActive() {
-        return this.router.isActive(this.thisUrl(), false);
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        Replace(this.el);
-    }
+if (false) {
+    /** @type {?} */
+    AppSidebarNavComponent.prototype.navItems;
+    /** @type {?} */
+    AppSidebarNavComponent.prototype._sidebarBav;
+    /** @type {?} */
+    AppSidebarNavComponent.prototype.role;
+    /** @type {?} */
+    AppSidebarNavComponent.prototype.navItemsArray;
+    /** @type {?} */
+    AppSidebarNavComponent.prototype.router;
 }
-AppSidebarNavItemComponent.decorators = [
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavDividerComponent {
+    constructor() { }
+    /**
+     * @return {?}
+     */
+    ngOnInit() { }
+}
+AppSidebarNavDividerComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-sidebar-nav-item',
-                template: `
-    <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.class : 'nav-item'">
-      <app-sidebar-nav-link [link]='item'></app-sidebar-nav-link>
-    </li>
-    <ng-template #dropdown>
-      <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'"
-          [class.open]="isActive()"
-          routerLinkActive="open"
-          appNavDropdown>
-        <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>
-      </li>
-    </ng-template>
-    `
-            },] },
+                selector: 'app-sidebar-nav-divider, cui-sidebar-nav-divider',
+                template: ``
+            }] }
 ];
 /** @nocollapse */
-AppSidebarNavItemComponent.ctorParameters = () => [
-    { type: Router },
-    { type: ElementRef }
-];
-AppSidebarNavItemComponent.propDecorators = {
+AppSidebarNavDividerComponent.ctorParameters = () => [];
+AppSidebarNavDividerComponent.propDecorators = {
     item: [{ type: Input }]
 };
-class AppSidebarNavLinkComponent {
+if (false) {
+    /** @type {?} */
+    AppSidebarNavDividerComponent.prototype.item;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @abstract
+ */
+class SidebarNavService {
+}
+SidebarNavService.decorators = [
+    { type: Injectable }
+];
+if (false) {
+    /**
+     * Returns a sidebar-nav items config NavData
+     * @abstract
+     * @return {?}
+     */
+    SidebarNavService.prototype.getSidebarNavItemsConfig = function () { };
+}
+class SidebarNavHelper {
+    constructor() {
+        this.hasBadge = (/**
+         * @param {?} item
+         * @return {?}
+         */
+        (item) => Boolean(item.badge));
+        this.hasIcon = (/**
+         * @param {?} item
+         * @return {?}
+         */
+        (item) => Boolean(item.icon));
+    }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    itemType(item) {
+        if (item.divider) {
+            return 'divider';
+        }
+        else if (item.title) {
+            return 'title';
+        }
+        else if (item.children) {
+            return 'dropdown';
+        }
+        else if (item.label) {
+            return 'label';
+        }
+        else if (!Object.keys(item).length) {
+            return 'empty';
+        }
+        else {
+            return 'link';
+        }
+    }
     /**
      * @param {?} router
-     * @param {?} el
+     * @param {?} item
+     * @return {?}
      */
-    constructor(router, el) {
+    isActive(router, item) {
+        return router.isActive(item.url, false);
+    }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    getIconClass(item) {
+        /** @type {?} */
+        const classes = {
+            'nav-icon': true
+        };
+        /** @type {?} */
+        const icon = item.icon;
+        classes[icon] = this.hasIcon(item);
+        return classes;
+    }
+}
+if (false) {
+    /** @type {?} */
+    SidebarNavHelper.prototype.hasBadge;
+    /** @type {?} */
+    SidebarNavHelper.prototype.hasIcon;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavDropdownComponent {
+    /**
+     * @param {?} helper
+     */
+    constructor(helper) {
+        this.helper = helper;
+    }
+}
+AppSidebarNavDropdownComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-dropdown, cui-sidebar-nav-dropdown',
+                template: `
+    <a class="nav-link nav-dropdown-toggle"
+       appNavDropdownToggle
+       [appHtmlAttr]="item.attributes">
+      <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
+      <ng-container>{{item.name}}</ng-container>
+      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
+    </a>
+    <app-sidebar-nav-items
+      class="nav-dropdown-items"
+      [items]="item.children">
+    </app-sidebar-nav-items>
+  `,
+                providers: [SidebarNavHelper],
+                styles: ['.nav-dropdown-toggle { cursor: pointer; }',
+                    '.nav-dropdown-items { display: block; }']
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavDropdownComponent.ctorParameters = () => [
+    { type: SidebarNavHelper }
+];
+AppSidebarNavDropdownComponent.propDecorators = {
+    item: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    AppSidebarNavDropdownComponent.prototype.item;
+    /** @type {?} */
+    AppSidebarNavDropdownComponent.prototype.helper;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavItemsComponent {
+    /**
+     * @param {?} document
+     * @param {?} renderer
+     * @param {?} router
+     * @param {?} helper
+     */
+    constructor(document, renderer, router, helper) {
+        this.document = document;
+        this.renderer = renderer;
         this.router = router;
-        this.el = el;
+        this.helper = helper;
+    }
+    /**
+     * @param {?} items
+     * @return {?}
+     */
+    set items(items) {
+        this._items = [...items];
     }
     /**
      * @return {?}
      */
-    hasVariant() {
-        return this.link.variant ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    isBadge() {
-        return this.link.badge ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    isExternalLink() {
-        return this.link.url.substring(0, 4) === 'http' ? true : false;
-    }
-    /**
-     * @return {?}
-     */
-    isIcon() {
-        return this.link.icon ? true : false;
+    get items() {
+        return this._items;
     }
     /**
      * @return {?}
      */
     hideMobile() {
-        if (document.body.classList.contains('sidebar-show')) {
-            document.body.classList.toggle('sidebar-show');
+        if (this.document.body.classList.contains('sidebar-show')) {
+            this.renderer.removeClass(this.document.body, 'sidebar-show');
         }
+    }
+}
+AppSidebarNavItemsComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-items, cui-sidebar-nav-items',
+                template: `
+    <ng-container *ngFor="let item of items">
+      <ng-container [ngSwitch]="helper.itemType(item)">
+        <app-sidebar-nav-dropdown
+          *ngSwitchCase="'dropdown'"
+          [item]="item"
+          [class.open]="helper.isActive(router, item)"
+          [ngClass]="item | appSidebarNavItemClass"
+          appNavDropdown
+          routerLinkActive="open">
+        </app-sidebar-nav-dropdown>
+        <app-sidebar-nav-divider
+          *ngSwitchCase="'divider'"
+          [item]="item"
+          [ngClass]="item | appSidebarNavItemClass"
+          [appHtmlAttr]="item.attributes">
+        </app-sidebar-nav-divider>
+        <app-sidebar-nav-title
+          *ngSwitchCase="'title'"
+          [item]="item"
+          [ngClass]="item | appSidebarNavItemClass"
+          [appHtmlAttr]="item.attributes">
+        </app-sidebar-nav-title>
+        <app-sidebar-nav-label
+          *ngSwitchCase="'label'"
+          [item]="item"
+          class="nav-item"
+          [ngClass]="item | appSidebarNavItemClass">
+        </app-sidebar-nav-label>
+        <ng-container
+          *ngSwitchCase="'empty'">
+        </ng-container>
+        <app-sidebar-nav-link
+          *ngSwitchDefault
+          [item]="item"
+          class="nav-item"
+          [ngClass]="item | appSidebarNavItemClass"
+          (linkClick)="hideMobile()"
+        >
+        </app-sidebar-nav-link>
+      </ng-container>
+    </ng-container>
+  `
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavItemsComponent.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Renderer2 },
+    { type: Router },
+    { type: SidebarNavHelper }
+];
+AppSidebarNavItemsComponent.propDecorators = {
+    items: [{ type: Input }]
+};
+if (false) {
+    /**
+     * @type {?}
+     * @protected
+     */
+    AppSidebarNavItemsComponent.prototype._items;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavItemsComponent.prototype.document;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavItemsComponent.prototype.renderer;
+    /** @type {?} */
+    AppSidebarNavItemsComponent.prototype.router;
+    /** @type {?} */
+    AppSidebarNavItemsComponent.prototype.helper;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavLinkContentComponent {
+    /**
+     * @param {?} helper
+     */
+    constructor(helper) {
+        this.helper = helper;
+    }
+}
+AppSidebarNavLinkContentComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-link-content, cui-sidebar-nav-link-content',
+                template: `
+    <ng-container *ngIf="true">
+      <i *ngIf="helper.hasIcon(item)" [ngClass]="item | appSidebarNavIcon"></i>
+      <ng-container>{{item.name}}</ng-container>
+      <span *ngIf="helper.hasBadge(item)" [ngClass]="item | appSidebarNavBadge">{{ item.badge.text }}</span>
+    </ng-container>
+  `,
+                providers: [SidebarNavHelper]
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavLinkContentComponent.ctorParameters = () => [
+    { type: SidebarNavHelper }
+];
+AppSidebarNavLinkContentComponent.propDecorators = {
+    item: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    AppSidebarNavLinkContentComponent.prototype.item;
+    /** @type {?} */
+    AppSidebarNavLinkContentComponent.prototype.helper;
+}
+class AppSidebarNavLinkComponent {
+    /**
+     * @param {?} router
+     */
+    constructor(router) {
+        this.router = router;
+        this.linkClick = new EventEmitter();
+        this.navigationEndObservable = (/** @type {?} */ (router.events.pipe(filter((/**
+         * @param {?} event
+         * @return {?}
+         */
+        event => {
+            return event instanceof NavigationEnd;
+        })))));
+    }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    set item(item) {
+        this._item = JSON.parse(JSON.stringify(item));
+    }
+    /**
+     * @return {?}
+     */
+    get item() {
+        return this._item;
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        Replace(this.el);
+        this.url = typeof this.item.url === 'string' ? this.item.url : this.router.serializeUrl(this.router.createUrlTree(this.item.url));
+        this.linkType = this.getLinkType();
+        this.href = this.isDisabled() ? '' : (this.item.href || this.url);
+        this.linkActive = this.router.url.split(/[?#(;]/)[0] === this.href.split(/[?#(;]/)[0];
+        this.navSubscription = this.navigationEndObservable.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        event => {
+            /** @type {?} */
+            const itemUrlArray = this.href.split(/[?#(;]/)[0].split('/');
+            /** @type {?} */
+            const urlArray = event.urlAfterRedirects.split(/[?#(;]/)[0].split('/');
+            this.linkActive = itemUrlArray.every((/**
+             * @param {?} value
+             * @param {?} index
+             * @return {?}
+             */
+            (value, index) => value === urlArray[index]));
+        }));
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this.navSubscription.unsubscribe();
+    }
+    /**
+     * @return {?}
+     */
+    getLinkType() {
+        return this.isDisabled() ? 'disabled' : this.isExternalLink() ? 'external' : 'link';
+    }
+    /**
+     * @return {?}
+     */
+    isDisabled() {
+        return (this.item.attributes && this.item.attributes.disabled) ? true : null;
+    }
+    /**
+     * @return {?}
+     */
+    isExternalLink() {
+        return !!this.item.href || this.url.substring(0, 4) === 'http';
+    }
+    /**
+     * @return {?}
+     */
+    linkClicked() {
+        this.linkClick.emit();
     }
 }
 AppSidebarNavLinkComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-sidebar-nav-link',
-                template: `
-    <a *ngIf="!isExternalLink(); else external"
-      [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
-      routerLinkActive="active"
-      [routerLink]="[link.url]"
-      (click)="hideMobile()">
-      <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-      {{ link.name }}
-      <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-    </a>
-    <ng-template #external>
-      <a [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'" href="{{link.url}}">
-        <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-        {{ link.name }}
-        <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-      </a>
-    </ng-template>
-  `
-            },] },
+                selector: 'app-sidebar-nav-link, cui-sidebar-nav-link',
+                template: "<ng-container [ngSwitch]=\"linkType\">\r\n  <a *ngSwitchCase=\"'disabled'\"\r\n     [ngClass]=\"item | appSidebarNavLink\"\r\n     [appHtmlAttr]=\"item.attributes\"\r\n  >\r\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\r\n  </a>\r\n  <a *ngSwitchCase=\"'external'\"\r\n     [ngClass]=\"item | appSidebarNavLink\"\r\n     [href]=\"href\"\r\n     [appHtmlAttr]=\"item.attributes\"\r\n     (click)=\"linkClicked()\"\r\n  >\r\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\r\n  </a>\r\n  <a *ngSwitchDefault\r\n     [ngClass]=\"item | appSidebarNavLink\"\r\n     [appHtmlAttr]=\"item.attributes\"\r\n     [target]=\"item.attributes?.target\"\r\n     [queryParams]=\"item.linkProps?.queryParams\"\r\n     [fragment]=\"item.linkProps?.fragment\"\r\n     [queryParamsHandling]=\"item.linkProps?.queryParamsHandling\"\r\n     [preserveFragment]=\"item.linkProps?.preserveFragment\"\r\n     [skipLocationChange]=\"item.linkProps?.skipLocationChange\"\r\n     [replaceUrl]=\"item.linkProps?.replaceUrl\"\r\n     [state]=\"item.linkProps?.state\"\r\n     [routerLink]=\"item.url\"\r\n     [class.active]=\"linkActive\"\r\n     (click)=\"linkClicked()\"\r\n  >\r\n    <app-sidebar-nav-link-content [item]=\"item\"></app-sidebar-nav-link-content>\r\n  </a>\r\n</ng-container>\r\n",
+                providers: [SidebarNavHelper]
+            }] }
 ];
 /** @nocollapse */
 AppSidebarNavLinkComponent.ctorParameters = () => [
-    { type: Router },
-    { type: ElementRef }
+    { type: Router }
 ];
 AppSidebarNavLinkComponent.propDecorators = {
-    link: [{ type: Input }]
+    item: [{ type: Input }],
+    linkClick: [{ type: Output }]
 };
-class AppSidebarNavDropdownComponent {
+if (false) {
     /**
-     * @param {?} router
-     * @param {?} el
+     * @type {?}
+     * @protected
      */
-    constructor(router, el) {
-        this.router = router;
-        this.el = el;
-    }
+    AppSidebarNavLinkComponent.prototype._item;
+    /** @type {?} */
+    AppSidebarNavLinkComponent.prototype.linkClick;
+    /** @type {?} */
+    AppSidebarNavLinkComponent.prototype.linkType;
+    /** @type {?} */
+    AppSidebarNavLinkComponent.prototype.href;
+    /** @type {?} */
+    AppSidebarNavLinkComponent.prototype.linkActive;
     /**
-     * @return {?}
+     * @type {?}
+     * @private
      */
-    isBadge() {
-        return this.link.badge ? true : false;
-    }
+    AppSidebarNavLinkComponent.prototype.url;
     /**
-     * @return {?}
+     * @type {?}
+     * @private
      */
-    isIcon() {
-        return this.link.icon ? true : false;
-    }
+    AppSidebarNavLinkComponent.prototype.navigationEndObservable;
     /**
-     * @return {?}
+     * @type {?}
+     * @private
      */
-    ngOnInit() {
-        Replace(this.el);
-    }
+    AppSidebarNavLinkComponent.prototype.navSubscription;
+    /** @type {?} */
+    AppSidebarNavLinkComponent.prototype.router;
 }
-AppSidebarNavDropdownComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'app-sidebar-nav-dropdown',
-                template: `
-    <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle>
-      <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-      {{ link.name }}
-      <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-    </a>
-    <ul class="nav-dropdown-items">
-      <ng-template ngFor let-child [ngForOf]="link.children">
-        <app-sidebar-nav-item [item]='child'></app-sidebar-nav-item>
-      </ng-template>
-    </ul>
-  `,
-                styles: ['.nav-dropdown-toggle { cursor: pointer; }']
-            },] },
-];
-/** @nocollapse */
-AppSidebarNavDropdownComponent.ctorParameters = () => [
-    { type: Router },
-    { type: ElementRef }
-];
-AppSidebarNavDropdownComponent.propDecorators = {
-    link: [{ type: Input }]
-};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class AppSidebarNavTitleComponent {
     /**
      * @param {?} el
@@ -1279,31 +2277,95 @@ class AppSidebarNavTitleComponent {
      * @return {?}
      */
     ngOnInit() {
-        const /** @type {?} */ nativeElement = this.el.nativeElement;
-        const /** @type {?} */ li = this.renderer.createElement('li');
-        const /** @type {?} */ name = this.renderer.createText(this.title.name);
-        this.renderer.addClass(li, 'nav-title');
-        if (this.title.class) {
-            const /** @type {?} */ classes = this.title.class;
-            this.renderer.addClass(li, classes);
+        /** @type {?} */
+        const nativeElement = this.el.nativeElement;
+        /** @type {?} */
+        const name = this.renderer.createText(this.item.name);
+        if (this.item.class) {
+            /** @type {?} */
+            const classes = this.item.class;
+            this.renderer.addClass(nativeElement, classes);
         }
-        if (this.title.wrapper) {
-            const /** @type {?} */ wrapper = this.renderer.createElement(this.title.wrapper.element);
+        if (this.item.wrapper) {
+            /** @type {?} */
+            const wrapper = this.renderer.createElement(this.item.wrapper.element);
+            this.addAttribs(this.item.wrapper.attributes, wrapper);
             this.renderer.appendChild(wrapper, name);
-            this.renderer.appendChild(li, wrapper);
+            this.renderer.appendChild(nativeElement, wrapper);
         }
         else {
-            this.renderer.appendChild(li, name);
+            this.renderer.appendChild(nativeElement, name);
         }
-        this.renderer.appendChild(nativeElement, li);
-        Replace(this.el);
+    }
+    /**
+     * @private
+     * @param {?} attribs
+     * @param {?} element
+     * @return {?}
+     */
+    addAttribs(attribs, element) {
+        if (attribs) {
+            for (const attr in attribs) {
+                if (attr === 'style' && typeof (attribs[attr]) === 'object') {
+                    this.setStyle(attribs[attr], element);
+                }
+                else if (attr === 'class') {
+                    this.addClass(attribs[attr], element);
+                }
+                else {
+                    this.setAttrib(attr, attribs[attr], element);
+                }
+            }
+        }
+    }
+    /**
+     * @private
+     * @param {?} styles
+     * @param {?} el
+     * @return {?}
+     */
+    setStyle(styles, el) {
+        for (const style in styles) {
+            this.renderer.setStyle(el, style, styles[style]);
+        }
+    }
+    /**
+     * @private
+     * @param {?} classes
+     * @param {?} el
+     * @return {?}
+     */
+    addClass(classes, el) {
+        /** @type {?} */
+        const classArray = (Array.isArray(classes) ? classes : classes.split(' '));
+        classArray.filter((/**
+         * @param {?} element
+         * @return {?}
+         */
+        (element) => element.length > 0)).forEach((/**
+         * @param {?} element
+         * @return {?}
+         */
+        element => {
+            this.renderer.addClass(el, element);
+        }));
+    }
+    /**
+     * @private
+     * @param {?} key
+     * @param {?} value
+     * @param {?} el
+     * @return {?}
+     */
+    setAttrib(key, value, el) {
+        this.renderer.setAttribute(el, key, value);
     }
 }
 AppSidebarNavTitleComponent.decorators = [
     { type: Component, args: [{
-                selector: 'app-sidebar-nav-title',
+                selector: 'app-sidebar-nav-title, cui-sidebar-nav-title',
                 template: ''
-            },] },
+            }] }
 ];
 /** @nocollapse */
 AppSidebarNavTitleComponent.ctorParameters = () => [
@@ -1311,12 +2373,228 @@ AppSidebarNavTitleComponent.ctorParameters = () => [
     { type: Renderer2 }
 ];
 AppSidebarNavTitleComponent.propDecorators = {
-    title: [{ type: Input }]
+    item: [{ type: Input }]
 };
+if (false) {
+    /** @type {?} */
+    AppSidebarNavTitleComponent.prototype.item;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavTitleComponent.prototype.el;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavTitleComponent.prototype.renderer;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavLabelComponent {
+    /**
+     * @param {?} helper
+     */
+    constructor(helper) {
+        this.helper = helper;
+        this.classes = {
+            'nav-label': true,
+            'active': true
+        };
+        this.iconClasses = {};
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() {
+        this.iconClasses = this.helper.getIconClass(this.item);
+    }
+    /**
+     * @return {?}
+     */
+    getItemClass() {
+        /** @type {?} */
+        const itemClass = this.item.class;
+        this.classes[itemClass] = !!itemClass;
+        return this.classes;
+    }
+    /**
+     * @return {?}
+     */
+    getLabelIconClass() {
+        /** @type {?} */
+        const variant = `text-${this.item.label.variant}`;
+        this.iconClasses[variant] = !!this.item.label.variant;
+        /** @type {?} */
+        const labelClass = this.item.label.class;
+        this.iconClasses[labelClass] = !!labelClass;
+        return this.iconClasses;
+    }
+}
+AppSidebarNavLabelComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'app-sidebar-nav-label, cui-sidebar-nav-label',
+                template: "<a [ngClass]=\"getItemClass()\"\r\n   href=\"{{item.url}}\"\r\n   [appHtmlAttr]=\"item.attributes\">\r\n  <i *ngIf=\"helper.hasIcon(item)\" [ngClass]=\"getLabelIconClass()\"></i>\r\n  <ng-container>{{item.name}}</ng-container>\r\n  <span *ngIf=\"helper.hasBadge(item)\" [ngClass]=\"item | appSidebarNavBadge\">{{ item.badge.text }}</span>\r\n</a>\r\n"
+            }] }
+];
+/** @nocollapse */
+AppSidebarNavLabelComponent.ctorParameters = () => [
+    { type: SidebarNavHelper }
+];
+AppSidebarNavLabelComponent.propDecorators = {
+    item: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    AppSidebarNavLabelComponent.prototype.item;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavLabelComponent.prototype.classes;
+    /**
+     * @type {?}
+     * @private
+     */
+    AppSidebarNavLabelComponent.prototype.iconClasses;
+    /** @type {?} */
+    AppSidebarNavLabelComponent.prototype.helper;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavIconPipe {
+    /**
+     * @param {?} item
+     * @param {?=} args
+     * @return {?}
+     */
+    transform(item, args) {
+        /** @type {?} */
+        const classes = {
+            'nav-icon': true
+        };
+        /** @type {?} */
+        const icon = item.icon;
+        classes[icon] = !!item.icon;
+        return classes;
+    }
+}
+AppSidebarNavIconPipe.decorators = [
+    { type: Pipe, args: [{
+                name: 'appSidebarNavIcon'
+            },] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavBadgePipe {
+    /**
+     * @param {?} item
+     * @param {?=} args
+     * @return {?}
+     */
+    transform(item, args) {
+        /** @type {?} */
+        const classes = {
+            'badge': true
+        };
+        /** @type {?} */
+        const variant = `badge-${item.badge.variant}`;
+        classes[variant] = !!item.badge.variant;
+        classes[item.badge.class] = !!item.badge.class;
+        return classes;
+    }
+}
+AppSidebarNavBadgePipe.decorators = [
+    { type: Pipe, args: [{
+                name: 'appSidebarNavBadge'
+            },] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavLinkPipe {
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    transform(item) {
+        /** @type {?} */
+        const classes = { 'nav-link': true };
+        /** @type {?} */
+        const disabled = item.attributes && item.attributes.disabled;
+        classes['disabled'] = disabled;
+        classes['btn-link'] = disabled;
+        classes[`nav-link-${item.variant}`] = !!item.variant;
+        return classes;
+    }
+}
+AppSidebarNavLinkPipe.decorators = [
+    { type: Pipe, args: [{
+                name: 'appSidebarNavLink'
+            },] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AppSidebarNavItemClassPipe {
+    /**
+     * @param {?} helper
+     */
+    constructor(helper) {
+        this.helper = helper;
+    }
+    /**
+     * @param {?} item
+     * @param {...?} args
+     * @return {?}
+     */
+    transform(item, ...args) {
+        /** @type {?} */
+        const itemType = this.helper.itemType(item);
+        /** @type {?} */
+        let itemClass;
+        if (['divider', 'title'].includes(itemType)) {
+            itemClass = `nav-${itemType}`;
+        }
+        else if (itemType === 'dropdown') {
+            itemClass = 'nav-item nav-dropdown';
+        }
+        else {
+            itemClass = 'nav-item';
+        }
+        return item.class ? `${itemClass} ${item.class}` : itemClass;
+    }
+}
+AppSidebarNavItemClassPipe.decorators = [
+    { type: Pipe, args: [{
+                name: 'appSidebarNavItemClass'
+            },] }
+];
+/** @nocollapse */
+AppSidebarNavItemClassPipe.ctorParameters = () => [
+    { type: SidebarNavHelper }
+];
+if (false) {
+    /** @type {?} */
+    AppSidebarNavItemClassPipe.prototype.helper;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AppSidebarModule {
 }
@@ -1333,10 +2611,12 @@ AppSidebarModule.decorators = [
                     AppSidebarHeaderComponent,
                     AppSidebarMinimizerComponent,
                     AppSidebarComponent,
+                    AppSidebarNavItemsComponent,
                     AppSidebarNavComponent,
+                    AppSidebarNavDividerComponent,
                     AppSidebarNavDropdownComponent,
-                    AppSidebarNavItemComponent,
                     AppSidebarNavLinkComponent,
+                    AppSidebarNavLinkContentComponent,
                     AppSidebarNavTitleComponent,
                     NavDropdownDirective,
                     NavDropdownToggleDirective,
@@ -1349,33 +2629,47 @@ AppSidebarModule.decorators = [
                     AppSidebarMinimizerComponent,
                     AppSidebarMinimizerComponent,
                     AppSidebarComponent,
+                    AppSidebarNavItemsComponent,
                     AppSidebarNavComponent,
+                    AppSidebarNavDividerComponent,
                     AppSidebarNavDropdownComponent,
-                    AppSidebarNavItemComponent,
                     AppSidebarNavLinkComponent,
+                    AppSidebarNavLinkContentComponent,
                     AppSidebarNavTitleComponent,
                     NavDropdownDirective,
-                    NavDropdownToggleDirective
+                    NavDropdownToggleDirective,
+                    AppSidebarNavLabelComponent,
+                    AppSidebarNavIconPipe,
+                    AppSidebarNavBadgePipe,
+                    AppSidebarNavLinkPipe,
+                    AppSidebarNavItemClassPipe
+                ],
+                providers: [
+                    SidebarNavHelper,
+                    AppSidebarService
                 ]
-            },] },
+            },] }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-// export * from './lib/shared/index';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule, AppAsideComponent as ɵh, AppBreadcrumbComponent as ɵi, AppBreadcrumbService as ɵj, AppFooterComponent as ɵk, AppHeaderComponent as ɵl, AsideToggleDirective as ɵg, BrandMinimizeDirective as ɵf, MobileSidebarToggleDirective as ɵd, SidebarMinimizeDirective as ɵc, SidebarOffCanvasCloseDirective as ɵe, SidebarToggleDirective as ɵb, LayoutModule as ɵa, AppSidebarFooterComponent as ɵm, AppSidebarFormComponent as ɵn, AppSidebarHeaderComponent as ɵo, AppSidebarMinimizerComponent as ɵp, AppSidebarNavComponent as ɵt, AppSidebarNavDropdownComponent as ɵw, AppSidebarNavItemComponent as ɵu, AppSidebarNavLinkComponent as ɵv, AppSidebarNavTitleComponent as ɵx, NavDropdownDirective as ɵr, NavDropdownToggleDirective as ɵs, AppSidebarComponent as ɵq };
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29yZXVpLWFuZ3VsYXIuanMubWFwIiwic291cmNlcyI6WyJuZzovL0Bjb3JldWkvYW5ndWxhci9saWIvc2hhcmVkL2NsYXNzZXMudHMiLCJuZzovL0Bjb3JldWkvYW5ndWxhci9saWIvc2hhcmVkL3RvZ2dsZS1jbGFzc2VzLnRzIiwibmc6Ly9AY29yZXVpL2FuZ3VsYXIvbGliL3NoYXJlZC9sYXlvdXQvbGF5b3V0LmRpcmVjdGl2ZS50cyIsIm5nOi8vQGNvcmV1aS9hbmd1bGFyL2xpYi9zaGFyZWQvbGF5b3V0L2xheW91dC5tb2R1bGUudHMiLCJuZzovL0Bjb3JldWkvYW5ndWxhci9saWIvc2hhcmVkL3JlcGxhY2UudHMiLCJuZzovL0Bjb3JldWkvYW5ndWxhci9saWIvYXNpZGUvYXBwLWFzaWRlLmNvbXBvbmVudC50cyIsIm5nOi8vQGNvcmV1aS9hbmd1bGFyL2xpYi9hc2lkZS9hcHAtYXNpZGUubW9kdWxlLnRzIiwibmc6Ly9AY29yZXVpL2FuZ3VsYXIvbGliL2JyZWFkY3J1bWIvYXBwLWJyZWFkY3J1bWIuc2VydmljZS50cyIsIm5nOi8vQGNvcmV1aS9hbmd1bGFyL2xpYi9icmVhZGNydW1iL2FwcC1icmVhZGNydW1iLmNvbXBvbmVudC50cyIsIm5nOi8vQGNvcmV1aS9hbmd1bGFyL2xpYi9icmVhZGNydW1iL2FwcC1icmVhZGNydW1iLm1vZHVsZS50cyIsIm5nOi8vQGNvcmV1aS9hbmd1bGFyL2xpYi9mb290ZXIvYXBwLWZvb3Rlci5jb21wb25lbnQudHMiLCJuZzovL0Bjb3JldWkvYW5ndWxhci9saWIvZm9vdGVyL2FwcC1mb290ZXIubW9kdWxlLnRzIiwibmc6Ly9AY29yZXVpL2FuZ3VsYXIvbGliL2hlYWRlci9hcHAtaGVhZGVyLmNvbXBvbmVudC50cyIsIm5nOi8vQGNvcmV1aS9hbmd1bGFyL2xpYi9oZWFkZXIvYXBwLWhlYWRlci5tb2R1bGUudHMiLCJuZzovL0Bjb3JldWkvYW5ndWxhci9saWIvc2lkZWJhci9hcHAtc2lkZWJhci1mb290ZXIuY29tcG9uZW50LnRzIiwibmc6Ly9AY29yZXVpL2FuZ3VsYXIvbGliL3NpZGViYXIvYXBwLXNpZGViYXItZm9ybS5jb21wb25lbnQudHMiLCJuZzovL0Bjb3JldWkvYW5ndWxhci9saWIvc2lkZWJhci9hcHAtc2lkZWJhci1oZWFkZXIuY29tcG9uZW50LnRzIiwibmc6Ly9AY29yZXVpL2FuZ3VsYXIvbGliL3NpZGViYXIvYXBwLXNpZGViYXItbWluaW1pemVyLmNvbXBvbmVudC50cyIsIm5nOi8vQGNvcmV1aS9hbmd1bGFyL2xpYi9zaWRlYmFyL2FwcC1zaWRlYmFyLmNvbXBvbmVudC50cyIsIm5nOi8vQGNvcmV1aS9hbmd1bGFyL2xpYi9zaWRlYmFyL2FwcC1zaWRlYmFyLW5hdi5jb21wb25lbnQudHMiLCJuZzovL0Bjb3JldWkvYW5ndWxhci9saWIvc2lkZWJhci9hcHAtc2lkZWJhci5tb2R1bGUudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGNvbnN0IHNpZGViYXJDc3NDbGFzc2VzOiBBcnJheTxzdHJpbmc+ID0gW1xyXG4gICdzaWRlYmFyLXNob3cnLFxyXG4gICdzaWRlYmFyLXNtLXNob3cnLFxyXG4gICdzaWRlYmFyLW1kLXNob3cnLFxyXG4gICdzaWRlYmFyLWxnLXNob3cnLFxyXG4gICdzaWRlYmFyLXhsLXNob3cnXHJcbl07XHJcblxyXG5leHBvcnQgY29uc3QgYXNpZGVNZW51Q3NzQ2xhc3NlczogQXJyYXk8c3RyaW5nPiA9IFtcclxuICAnYXNpZGUtbWVudS1zaG93JyxcclxuICAnYXNpZGUtbWVudS1zbS1zaG93JyxcclxuICAnYXNpZGUtbWVudS1tZC1zaG93JyxcclxuICAnYXNpZGUtbWVudS1sZy1zaG93JyxcclxuICAnYXNpZGUtbWVudS14bC1zaG93J1xyXG5dO1xyXG4iLCJjb25zdCBSZW1vdmVDbGFzc2VzID0gKE5ld0NsYXNzTmFtZXMpID0+IHtcclxuICBjb25zdCBNYXRjaENsYXNzZXMgPSBOZXdDbGFzc05hbWVzLm1hcCgoQ2xhc3MpID0+IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKS5jbGFzc0xpc3QuY29udGFpbnMoQ2xhc3MpKTtcclxuICByZXR1cm4gTWF0Y2hDbGFzc2VzLmluZGV4T2YodHJ1ZSkgIT09IC0xO1xyXG59O1xyXG5cclxuZXhwb3J0IGNvbnN0IFRvZ2dsZUNsYXNzZXMgPSAoVG9nZ2xlLCBDbGFzc05hbWVzKSA9PiB7XHJcbiAgY29uc3QgTGV2ZWwgPSBDbGFzc05hbWVzLmluZGV4T2YoVG9nZ2xlKTtcclxuICBjb25zdCBOZXdDbGFzc05hbWVzID0gQ2xhc3NOYW1lcy5zbGljZSgwLCBMZXZlbCArIDEpO1xyXG5cclxuICBpZiAoUmVtb3ZlQ2xhc3NlcyhOZXdDbGFzc05hbWVzKSkge1xyXG4gICAgTmV3Q2xhc3NOYW1lcy5tYXAoKENsYXNzKSA9PiBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdib2R5JykuY2xhc3NMaXN0LnJlbW92ZShDbGFzcykpO1xyXG4gIH0gZWxzZSB7XHJcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdib2R5JykuY2xhc3NMaXN0LmFkZChUb2dnbGUpO1xyXG4gIH1cclxufTtcclxuIiwiaW1wb3J0IHsgRGlyZWN0aXZlLCBIb3N0TGlzdGVuZXIsIElucHV0LCBFbGVtZW50UmVmLCBPbkluaXQgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHsgc2lkZWJhckNzc0NsYXNzZXMsIGFzaWRlTWVudUNzc0NsYXNzZXMgfSBmcm9tICcuLy4uL2NsYXNzZXMnO1xyXG5pbXBvcnQgeyBUb2dnbGVDbGFzc2VzIH0gZnJvbSAnLi8uLi90b2dnbGUtY2xhc3Nlcyc7XHJcblxyXG4vKipcclxuKiBBbGxvd3MgdGhlIHNpZGViYXIgdG8gYmUgdG9nZ2xlZCB2aWEgY2xpY2suXHJcbiovXHJcbkBEaXJlY3RpdmUoe1xyXG4gIHNlbGVjdG9yOiAnW2FwcFNpZGViYXJUb2dnbGVyXSdcclxufSlcclxuZXhwb3J0IGNsYXNzIFNpZGViYXJUb2dnbGVEaXJlY3RpdmUgaW1wbGVtZW50cyBPbkluaXQge1xyXG4gIEBJbnB1dCgnYXBwU2lkZWJhclRvZ2dsZXInKSBicmVha3BvaW50OiBzdHJpbmc7XHJcbiAgcHVibGljIGJwO1xyXG4gIGNvbnN0cnVjdG9yKCkge31cclxuICBuZ09uSW5pdCgpOiB2b2lkIHtcclxuICAgIHRoaXMuYnAgPSB0aGlzLmJyZWFrcG9pbnQ7XHJcbiAgfVxyXG4gIEBIb3N0TGlzdGVuZXIoJ2NsaWNrJywgWyckZXZlbnQnXSlcclxuICB0b2dnbGVPcGVuKCRldmVudDogYW55KSB7XHJcbiAgICAkZXZlbnQucHJldmVudERlZmF1bHQoKTtcclxuICAgIGxldCBjc3NDbGFzcztcclxuICAgIHRoaXMuYnAgPyBjc3NDbGFzcyA9IGBzaWRlYmFyLSR7dGhpcy5icH0tc2hvd2AgOiBjc3NDbGFzcyA9IHNpZGViYXJDc3NDbGFzc2VzWzBdO1xyXG4gICAgVG9nZ2xlQ2xhc3Nlcyhjc3NDbGFzcywgc2lkZWJhckNzc0NsYXNzZXMpO1xyXG4gIH1cclxufVxyXG5cclxuQERpcmVjdGl2ZSh7XHJcbiAgc2VsZWN0b3I6ICdbYXBwU2lkZWJhck1pbmltaXplcl0nXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBTaWRlYmFyTWluaW1pemVEaXJlY3RpdmUge1xyXG4gIGNvbnN0cnVjdG9yKCkgeyB9XHJcblxyXG4gIEBIb3N0TGlzdGVuZXIoJ2NsaWNrJywgWyckZXZlbnQnXSlcclxuICB0b2dnbGVPcGVuKCRldmVudDogYW55KSB7XHJcbiAgICAkZXZlbnQucHJldmVudERlZmF1bHQoKTtcclxuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKS5jbGFzc0xpc3QudG9nZ2xlKCdzaWRlYmFyLW1pbmltaXplZCcpO1xyXG4gIH1cclxufVxyXG5cclxuQERpcmVjdGl2ZSh7XHJcbiAgc2VsZWN0b3I6ICdbYXBwTW9iaWxlU2lkZWJhclRvZ2dsZXJdJ1xyXG59KVxyXG5leHBvcnQgY2xhc3MgTW9iaWxlU2lkZWJhclRvZ2dsZURpcmVjdGl2ZSB7XHJcbiAgY29uc3RydWN0b3IoKSB7IH1cclxuXHJcbiAgLy8gQ2hlY2sgaWYgZWxlbWVudCBoYXMgY2xhc3NcclxuICBwcml2YXRlIGhhc0NsYXNzKHRhcmdldDogYW55LCBlbGVtZW50Q2xhc3NOYW1lOiBzdHJpbmcpIHtcclxuICAgIHJldHVybiBuZXcgUmVnRXhwKCcoXFxcXHN8XiknICsgZWxlbWVudENsYXNzTmFtZSArICcoXFxcXHN8JCknKS50ZXN0KHRhcmdldC5jbGFzc05hbWUpO1xyXG4gIH1cclxuXHJcbiAgQEhvc3RMaXN0ZW5lcignY2xpY2snLCBbJyRldmVudCddKVxyXG4gIHRvZ2dsZU9wZW4oJGV2ZW50OiBhbnkpIHtcclxuICAgICRldmVudC5wcmV2ZW50RGVmYXVsdCgpO1xyXG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcignYm9keScpLmNsYXNzTGlzdC50b2dnbGUoJ3NpZGViYXItc2hvdycpO1xyXG4gIH1cclxufVxyXG5cclxuLyoqXHJcbiogQWxsb3dzIHRoZSBvZmYtY2FudmFzIHNpZGViYXIgdG8gYmUgY2xvc2VkIHZpYSBjbGljay5cclxuKi9cclxuQERpcmVjdGl2ZSh7XHJcbiAgc2VsZWN0b3I6ICdbYXBwU2lkZWJhckNsb3NlXSdcclxufSlcclxuZXhwb3J0IGNsYXNzIFNpZGViYXJPZmZDYW52YXNDbG9zZURpcmVjdGl2ZSB7XHJcbiAgY29uc3RydWN0b3IoKSB7IH1cclxuXHJcbiAgLy8gQ2hlY2sgaWYgZWxlbWVudCBoYXMgY2xhc3NcclxuICBwcml2YXRlIGhhc0NsYXNzKHRhcmdldDogYW55LCBlbGVtZW50Q2xhc3NOYW1lOiBzdHJpbmcpIHtcclxuICAgIHJldHVybiBuZXcgUmVnRXhwKCcoXFxcXHN8XiknICsgZWxlbWVudENsYXNzTmFtZSArICcoXFxcXHN8JCknKS50ZXN0KHRhcmdldC5jbGFzc05hbWUpO1xyXG4gIH1cclxuXHJcbiAgLy8gVG9nZ2xlIGVsZW1lbnQgY2xhc3NcclxuICBwcml2YXRlIHRvZ2dsZUNsYXNzKGVsZW06IGFueSwgZWxlbWVudENsYXNzTmFtZTogc3RyaW5nKSB7XHJcbiAgICBsZXQgbmV3Q2xhc3MgPSAnICcgKyBlbGVtLmNsYXNzTmFtZS5yZXBsYWNlKCAvW1xcdFxcclxcbl0vZywgJyAnICkgKyAnICc7XHJcbiAgICBpZiAodGhpcy5oYXNDbGFzcyhlbGVtLCBlbGVtZW50Q2xhc3NOYW1lKSkge1xyXG4gICAgICB3aGlsZSAobmV3Q2xhc3MuaW5kZXhPZignICcgKyBlbGVtZW50Q2xhc3NOYW1lICsgJyAnKSA+PSAwICkge1xyXG4gICAgICAgIG5ld0NsYXNzID0gbmV3Q2xhc3MucmVwbGFjZSggJyAnICsgZWxlbWVudENsYXNzTmFtZSArICcgJyAsICcgJyApO1xyXG4gICAgICB9XHJcbiAgICAgIGVsZW0uY2xhc3NOYW1lID0gbmV3Q2xhc3MucmVwbGFjZSgvXlxccyt8XFxzKyQvZywgJycpO1xyXG4gICAgfSBlbHNlIHtcclxuICAgICAgZWxlbS5jbGFzc05hbWUgKz0gJyAnICsgZWxlbWVudENsYXNzTmFtZTtcclxuICAgIH1cclxuICB9XHJcblxyXG4gIEBIb3N0TGlzdGVuZXIoJ2NsaWNrJywgWyckZXZlbnQnXSlcclxuICB0b2dnbGVPcGVuKCRldmVudDogYW55KSB7XHJcbiAgICAkZXZlbnQucHJldmVudERlZmF1bHQoKTtcclxuXHJcbiAgICBpZiAodGhpcy5oYXNDbGFzcyhkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdib2R5JyksICdzaWRlYmFyLW9mZi1jYW52YXMnKSkge1xyXG4gICAgICB0aGlzLnRvZ2dsZUNsYXNzKGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKSwgJ3NpZGViYXItb3BlbmVkJyk7XHJcbiAgICB9XHJcbiAgfVxyXG59XHJcblxyXG5ARGlyZWN0aXZlKHtcclxuICBzZWxlY3RvcjogJ1thcHBCcmFuZE1pbmltaXplcl0nXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBCcmFuZE1pbmltaXplRGlyZWN0aXZlIHtcclxuICBjb25zdHJ1Y3RvcigpIHsgfVxyXG5cclxuICBASG9zdExpc3RlbmVyKCdjbGljaycsIFsnJGV2ZW50J10pXHJcbiAgdG9nZ2xlT3BlbigkZXZlbnQ6IGFueSkge1xyXG4gICAgJGV2ZW50LnByZXZlbnREZWZhdWx0KCk7XHJcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdib2R5JykuY2xhc3NMaXN0LnRvZ2dsZSgnYnJhbmQtbWluaW1pemVkJyk7XHJcbiAgfVxyXG59XHJcblxyXG5cclxuLyoqXHJcbiogQWxsb3dzIHRoZSBhc2lkZSB0byBiZSB0b2dnbGVkIHZpYSBjbGljay5cclxuKi9cclxuQERpcmVjdGl2ZSh7XHJcbiAgc2VsZWN0b3I6ICdbYXBwQXNpZGVNZW51VG9nZ2xlcl0nLFxyXG59KVxyXG5leHBvcnQgY2xhc3MgQXNpZGVUb2dnbGVEaXJlY3RpdmUgaW1wbGVtZW50cyBPbkluaXQge1xyXG4gIEBJbnB1dCgnYXBwQXNpZGVNZW51VG9nZ2xlcicpIGJyZWFrcG9pbnQ6IHN0cmluZztcclxuICBwdWJsaWMgYnA7XHJcbiAgY29uc3RydWN0b3IoKSB7fVxyXG4gIG5nT25Jbml0KCk6IHZvaWQge1xyXG4gICAgdGhpcy5icCA9IHRoaXMuYnJlYWtwb2ludDtcclxuICB9XHJcbiAgQEhvc3RMaXN0ZW5lcignY2xpY2snLCBbJyRldmVudCddKVxyXG4gIHRvZ2dsZU9wZW4oJGV2ZW50OiBhbnkpIHtcclxuICAgICRldmVudC5wcmV2ZW50RGVmYXVsdCgpO1xyXG4gICAgbGV0IGNzc0NsYXNzO1xyXG4gICAgdGhpcy5icCA/IGNzc0NsYXNzID0gYGFzaWRlLW1lbnUtJHt0aGlzLmJwfS1zaG93YCA6IGNzc0NsYXNzID0gYXNpZGVNZW51Q3NzQ2xhc3Nlc1swXTtcclxuICAgIFRvZ2dsZUNsYXNzZXMoY3NzQ2xhc3MsIGFzaWRlTWVudUNzc0NsYXNzZXMpO1xyXG4gIH1cclxufVxyXG4iLCJpbXBvcnQgeyBDb21tb25Nb2R1bGUgfSBmcm9tICdAYW5ndWxhci9jb21tb24nO1xyXG5pbXBvcnQgeyBOZ01vZHVsZX0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7XHJcbiAgQXNpZGVUb2dnbGVEaXJlY3RpdmUsXHJcbiAgQnJhbmRNaW5pbWl6ZURpcmVjdGl2ZSxcclxuICBNb2JpbGVTaWRlYmFyVG9nZ2xlRGlyZWN0aXZlLFxyXG4gIFNpZGViYXJUb2dnbGVEaXJlY3RpdmUsXHJcbiAgU2lkZWJhck1pbmltaXplRGlyZWN0aXZlLFxyXG4gIFNpZGViYXJPZmZDYW52YXNDbG9zZURpcmVjdGl2ZVxyXG59IGZyb20gJy4vbGF5b3V0LmRpcmVjdGl2ZSc7XHJcblxyXG5ATmdNb2R1bGUoe1xyXG4gIGltcG9ydHM6IFtcclxuICAgIENvbW1vbk1vZHVsZVxyXG4gIF0sXHJcbiAgZXhwb3J0czogW1xyXG4gICAgQXNpZGVUb2dnbGVEaXJlY3RpdmUsXHJcbiAgICBCcmFuZE1pbmltaXplRGlyZWN0aXZlLFxyXG4gICAgTW9iaWxlU2lkZWJhclRvZ2dsZURpcmVjdGl2ZSxcclxuICAgIFNpZGViYXJUb2dnbGVEaXJlY3RpdmUsXHJcbiAgICBTaWRlYmFyTWluaW1pemVEaXJlY3RpdmUsXHJcbiAgICBTaWRlYmFyT2ZmQ2FudmFzQ2xvc2VEaXJlY3RpdmVcclxuICBdLFxyXG4gIGRlY2xhcmF0aW9uczogW1xyXG4gICAgQXNpZGVUb2dnbGVEaXJlY3RpdmUsXHJcbiAgICBCcmFuZE1pbmltaXplRGlyZWN0aXZlLFxyXG4gICAgTW9iaWxlU2lkZWJhclRvZ2dsZURpcmVjdGl2ZSxcclxuICAgIFNpZGViYXJUb2dnbGVEaXJlY3RpdmUsXHJcbiAgICBTaWRlYmFyTWluaW1pemVEaXJlY3RpdmUsXHJcbiAgICBTaWRlYmFyT2ZmQ2FudmFzQ2xvc2VEaXJlY3RpdmVcclxuICBdXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBMYXlvdXRNb2R1bGUgeyB9XHJcbiIsImV4cG9ydCBmdW5jdGlvbiBSZXBsYWNlKGVsOiBhbnkpOiBhbnkge1xyXG4gIGNvbnN0IG5hdGl2ZUVsZW1lbnQ6IEhUTUxFbGVtZW50ID0gZWwubmF0aXZlRWxlbWVudDtcclxuICBjb25zdCBwYXJlbnRFbGVtZW50OiBIVE1MRWxlbWVudCA9IG5hdGl2ZUVsZW1lbnQucGFyZW50RWxlbWVudDtcclxuICAvLyBtb3ZlIGFsbCBjaGlsZHJlbiBvdXQgb2YgdGhlIGVsZW1lbnRcclxuICB3aGlsZSAobmF0aXZlRWxlbWVudC5maXJzdENoaWxkKSB7XHJcbiAgICBwYXJlbnRFbGVtZW50Lmluc2VydEJlZm9yZShuYXRpdmVFbGVtZW50LmZpcnN0Q2hpbGQsIG5hdGl2ZUVsZW1lbnQpO1xyXG4gIH1cclxuICAvLyByZW1vdmUgdGhlIGVtcHR5IGVsZW1lbnQodGhlIGhvc3QpXHJcbiAgcGFyZW50RWxlbWVudC5yZW1vdmVDaGlsZChuYXRpdmVFbGVtZW50KTtcclxufVxyXG4iLCJpbXBvcnQgeyBDb21wb25lbnQsIEVsZW1lbnRSZWYsIElucHV0LCBPbkluaXQgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHsgYXNpZGVNZW51Q3NzQ2xhc3NlcywgUmVwbGFjZSB9IGZyb20gJy4vLi4vc2hhcmVkL2luZGV4JztcclxuXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnYXBwLWFzaWRlJyxcclxuICB0ZW1wbGF0ZTogYFxyXG4gICAgPGFzaWRlIGNsYXNzPVwiYXNpZGUtbWVudVwiPlxyXG4gICAgICA8bmctY29udGVudD48L25nLWNvbnRlbnQ+XHJcbiAgICA8L2FzaWRlPlxyXG4gIGBcclxufSlcclxuZXhwb3J0IGNsYXNzIEFwcEFzaWRlQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcclxuICBASW5wdXQoKSBkaXNwbGF5OiBhbnk7XHJcbiAgQElucHV0KCkgZml4ZWQ6IGJvb2xlYW47XHJcbiAgQElucHV0KCkgb2ZmQ2FudmFzOiBib29sZWFuO1xyXG5cclxuICBjb25zdHJ1Y3Rvcihwcml2YXRlIGVsOiBFbGVtZW50UmVmKSB7fVxyXG5cclxuICBuZ09uSW5pdCgpIHtcclxuICAgIFJlcGxhY2UodGhpcy5lbCk7XHJcbiAgICB0aGlzLmlzRml4ZWQodGhpcy5maXhlZCk7XHJcbiAgICB0aGlzLmRpc3BsYXlCcmVha3BvaW50KHRoaXMuZGlzcGxheSk7XHJcbiAgfVxyXG5cclxuICBpc0ZpeGVkKGZpeGVkOiBib29sZWFuKTogdm9pZCB7XHJcbiAgICBpZiAodGhpcy5maXhlZCkgeyBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdib2R5JykuY2xhc3NMaXN0LmFkZCgnYXNpZGUtbWVudS1maXhlZCcpOyB9XHJcbiAgfVxyXG5cclxuICBpc09mZkNhbnZhcyhvZmZDYW52YXM6IGJvb2xlYW4pOiB2b2lkIHtcclxuICAgIGlmICh0aGlzLm9mZkNhbnZhcykgeyBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCdib2R5JykuY2xhc3NMaXN0LmFkZCgnYXNpZGUtbWVudS1vZmYtY2FudmFzJyk7IH1cclxuICB9XHJcblxyXG4gIGRpc3BsYXlCcmVha3BvaW50KGRpc3BsYXk6IGFueSk6IHZvaWQge1xyXG4gICAgaWYgKHRoaXMuZGlzcGxheSAhPT0gZmFsc2UgKSB7XHJcbiAgICAgIGxldCBjc3NDbGFzcztcclxuICAgICAgdGhpcy5kaXNwbGF5ID8gY3NzQ2xhc3MgPSBgYXNpZGUtbWVudS0ke3RoaXMuZGlzcGxheX0tc2hvd2AgOiBjc3NDbGFzcyA9IGFzaWRlTWVudUNzc0NsYXNzZXNbMF07XHJcbiAgICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKS5jbGFzc0xpc3QuYWRkKGNzc0NsYXNzKTtcclxuICAgIH1cclxuICB9XHJcbn1cclxuIiwiaW1wb3J0IHsgQ29tbW9uTW9kdWxlfSBmcm9tICdAYW5ndWxhci9jb21tb24nO1xyXG5pbXBvcnQgeyBOZ01vZHVsZSB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBMYXlvdXRNb2R1bGUgfSBmcm9tICcuLy4uL3NoYXJlZC9sYXlvdXQvbGF5b3V0Lm1vZHVsZSc7XHJcblxyXG5pbXBvcnQgeyBBcHBBc2lkZUNvbXBvbmVudCB9IGZyb20gJy4vYXBwLWFzaWRlLmNvbXBvbmVudCc7XHJcblxyXG5ATmdNb2R1bGUoe1xyXG4gIGltcG9ydHM6IFtcclxuICAgIENvbW1vbk1vZHVsZSxcclxuICAgIExheW91dE1vZHVsZVxyXG4gIF0sXHJcbiAgZXhwb3J0czogW1xyXG4gICAgQXBwQXNpZGVDb21wb25lbnQsXHJcbiAgICBMYXlvdXRNb2R1bGVcclxuICBdLFxyXG4gIGRlY2xhcmF0aW9uczogW1xyXG4gICAgQXBwQXNpZGVDb21wb25lbnRcclxuICBdXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBcHBBc2lkZU1vZHVsZSB7fVxyXG4iLCJpbXBvcnQgeyBJbmplY3RhYmxlLCBJbmplY3RvciB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBSb3V0ZXIsIEFjdGl2YXRlZFJvdXRlLCBOYXZpZ2F0aW9uRW5kIH0gZnJvbSAnQGFuZ3VsYXIvcm91dGVyJztcclxuaW1wb3J0IHsgQmVoYXZpb3JTdWJqZWN0LCBPYnNlcnZhYmxlIH0gZnJvbSAncnhqcy9pbmRleCc7XHJcbmltcG9ydCB7IGZpbHRlciB9IGZyb20gJ3J4anMvb3BlcmF0b3JzJztcclxuXHJcbkBJbmplY3RhYmxlKClcclxuZXhwb3J0IGNsYXNzIEFwcEJyZWFkY3J1bWJTZXJ2aWNlIHtcclxuXHJcbiAgYnJlYWRjcnVtYnM6IE9ic2VydmFibGU8QXJyYXk8T2JqZWN0Pj47XHJcblxyXG4gIHByaXZhdGUgX2JyZWFkY3J1bWJzOiBCZWhhdmlvclN1YmplY3Q8QXJyYXk8T2JqZWN0Pj47XHJcblxyXG4gIGNvbnN0cnVjdG9yKHByaXZhdGUgcm91dGVyOiBSb3V0ZXIsIHByaXZhdGUgcm91dGU6IEFjdGl2YXRlZFJvdXRlKSB7XHJcblxyXG4gICAgdGhpcy5fYnJlYWRjcnVtYnMgPSBuZXcgQmVoYXZpb3JTdWJqZWN0PE9iamVjdFtdPihuZXcgQXJyYXk8T2JqZWN0PigpKTtcclxuXHJcbiAgICB0aGlzLmJyZWFkY3J1bWJzID0gdGhpcy5fYnJlYWRjcnVtYnMuYXNPYnNlcnZhYmxlKCk7XHJcblxyXG4gICAgdGhpcy5yb3V0ZXIuZXZlbnRzLnBpcGUoZmlsdGVyKGV2ZW50ID0+IGV2ZW50IGluc3RhbmNlb2YgTmF2aWdhdGlvbkVuZCkpLnN1YnNjcmliZSgoZXZlbnQpID0+IHtcclxuICAgICAgY29uc3QgYnJlYWRjcnVtYnMgPSBbXTtcclxuICAgICAgbGV0IGN1cnJlbnRSb3V0ZSA9IHRoaXMucm91dGUucm9vdCxcclxuICAgICAgdXJsID0gJyc7XHJcbiAgICAgIGRvIHtcclxuICAgICAgICBjb25zdCBjaGlsZHJlblJvdXRlcyA9IGN1cnJlbnRSb3V0ZS5jaGlsZHJlbjtcclxuICAgICAgICBjdXJyZW50Um91dGUgPSBudWxsO1xyXG4gICAgICAgIC8vIHRzbGludDpkaXNhYmxlLW5leHQtbGluZTpuby1zaGFkb3dlZC12YXJpYWJsZVxyXG4gICAgICAgIGNoaWxkcmVuUm91dGVzLmZvckVhY2gocm91dGUgPT4ge1xyXG4gICAgICAgICAgaWYgKHJvdXRlLm91dGxldCA9PT0gJ3ByaW1hcnknKSB7XHJcbiAgICAgICAgICAgIGNvbnN0IHJvdXRlU25hcHNob3QgPSByb3V0ZS5zbmFwc2hvdDtcclxuICAgICAgICAgICAgdXJsICs9ICcvJyArIHJvdXRlU25hcHNob3QudXJsLm1hcChzZWdtZW50ID0+IHNlZ21lbnQucGF0aCkuam9pbignLycpO1xyXG4gICAgICAgICAgICBicmVhZGNydW1icy5wdXNoKHtcclxuICAgICAgICAgICAgICBsYWJlbDogcm91dGUuc25hcHNob3QuZGF0YSxcclxuICAgICAgICAgICAgICB1cmw6ICAgdXJsXHJcbiAgICAgICAgICAgIH0pO1xyXG4gICAgICAgICAgICBjdXJyZW50Um91dGUgPSByb3V0ZTtcclxuICAgICAgICAgIH1cclxuICAgICAgICB9KTtcclxuICAgICAgfSB3aGlsZSAoY3VycmVudFJvdXRlKTtcclxuXHJcbiAgICAgIHRoaXMuX2JyZWFkY3J1bWJzLm5leHQoT2JqZWN0LmFzc2lnbihbXSwgYnJlYWRjcnVtYnMpKTtcclxuXHJcbiAgICAgIHJldHVybiBicmVhZGNydW1icztcclxuICAgIH0pO1xyXG4gIH1cclxufVxyXG4iLCJpbXBvcnQgeyBDb21wb25lbnQsIEVsZW1lbnRSZWYsIElucHV0LCBPbkluaXQgIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7IFJlcGxhY2UgfSBmcm9tICcuLy4uL3NoYXJlZCc7XHJcbmltcG9ydCB7IEFwcEJyZWFkY3J1bWJTZXJ2aWNlIH0gZnJvbSAnLi9hcHAtYnJlYWRjcnVtYi5zZXJ2aWNlJztcclxuXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnYXBwLWJyZWFkY3J1bWInLFxyXG4gIHRlbXBsYXRlOiBgXHJcbiAgICA8bmctdGVtcGxhdGUgbmdGb3IgbGV0LWJyZWFkY3J1bWIgW25nRm9yT2ZdPVwiYnJlYWRjcnVtYnMgfCBhc3luY1wiIGxldC1sYXN0ID0gbGFzdD5cclxuICAgICAgPGxpIGNsYXNzPVwiYnJlYWRjcnVtYi1pdGVtXCJcclxuICAgICAgICAgICpuZ0lmPVwiYnJlYWRjcnVtYi5sYWJlbC50aXRsZSAmJiAoYnJlYWRjcnVtYi51cmwuc2xpY2UoLTEpID09ICcvJyB8fCBsYXN0KVwiXHJcbiAgICAgICAgICBbbmdDbGFzc109XCJ7YWN0aXZlOiBsYXN0fVwiPlxyXG4gICAgICAgIDxhICpuZ0lmPVwiIWxhc3RcIiBbcm91dGVyTGlua109XCJicmVhZGNydW1iLnVybFwiPnt7YnJlYWRjcnVtYi5sYWJlbC50aXRsZX19PC9hPlxyXG4gICAgICAgIDxzcGFuICpuZ0lmPVwibGFzdFwiIFtyb3V0ZXJMaW5rXT1cImJyZWFkY3J1bWIudXJsXCI+e3ticmVhZGNydW1iLmxhYmVsLnRpdGxlfX08L3NwYW4+XHJcbiAgICAgIDwvbGk+XHJcbiAgICA8L25nLXRlbXBsYXRlPlxyXG4gIGBcclxufSlcclxuZXhwb3J0IGNsYXNzIEFwcEJyZWFkY3J1bWJDb21wb25lbnQgaW1wbGVtZW50cyBPbkluaXQge1xyXG4gIEBJbnB1dCgpIGZpeGVkOiBib29sZWFuO1xyXG4gIHB1YmxpYyBicmVhZGNydW1icztcclxuXHJcbiAgY29uc3RydWN0b3IocHVibGljIHNlcnZpY2U6IEFwcEJyZWFkY3J1bWJTZXJ2aWNlLCBwdWJsaWMgZWw6IEVsZW1lbnRSZWYpIHsgfVxyXG5cclxuICBwdWJsaWMgbmdPbkluaXQoKTogdm9pZCB7XHJcbiAgICBSZXBsYWNlKHRoaXMuZWwpO1xyXG4gICAgdGhpcy5pc0ZpeGVkKHRoaXMuZml4ZWQpO1xyXG4gICAgdGhpcy5icmVhZGNydW1icyA9IHRoaXMuc2VydmljZS5icmVhZGNydW1icztcclxuICB9XHJcblxyXG4gIGlzRml4ZWQoZml4ZWQ6IGJvb2xlYW4pOiB2b2lkIHtcclxuICAgIGlmICh0aGlzLmZpeGVkKSB7IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKS5jbGFzc0xpc3QuYWRkKCdicmVhZGNydW1iLWZpeGVkJyk7IH1cclxuICB9XHJcbn1cclxuIiwiaW1wb3J0IHsgQ29tbW9uTW9kdWxlfSBmcm9tICdAYW5ndWxhci9jb21tb24nO1xyXG5pbXBvcnQgeyBOZ01vZHVsZSwgTW9kdWxlV2l0aFByb3ZpZGVyc30gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7IFJvdXRlck1vZHVsZSB9IGZyb20gJ0Bhbmd1bGFyL3JvdXRlcic7XHJcblxyXG4vLyBBcHAgQnJlYWRjcnVtYiBDb21wb25lbnRcclxuaW1wb3J0IHsgQXBwQnJlYWRjcnVtYlNlcnZpY2UgfSBmcm9tICcuL2FwcC1icmVhZGNydW1iLnNlcnZpY2UnO1xyXG5pbXBvcnQgeyBBcHBCcmVhZGNydW1iQ29tcG9uZW50IH0gZnJvbSAnLi9hcHAtYnJlYWRjcnVtYi5jb21wb25lbnQnO1xyXG5cclxuLy8gQGR5bmFtaWNcclxuQE5nTW9kdWxlKHtcclxuICBpbXBvcnRzOiBbIENvbW1vbk1vZHVsZSwgUm91dGVyTW9kdWxlIF0sXHJcbiAgZXhwb3J0czogWyBBcHBCcmVhZGNydW1iQ29tcG9uZW50IF0sXHJcbiAgZGVjbGFyYXRpb25zOiBbIEFwcEJyZWFkY3J1bWJDb21wb25lbnQgXVxyXG59KVxyXG5leHBvcnQgY2xhc3MgQXBwQnJlYWRjcnVtYk1vZHVsZSB7XHJcbiAgc3RhdGljIGZvclJvb3QoY29uZmlnPzogYW55KTogTW9kdWxlV2l0aFByb3ZpZGVycyB7XHJcbiAgICByZXR1cm4ge1xyXG4gICAgICBuZ01vZHVsZTogQXBwQnJlYWRjcnVtYk1vZHVsZSxcclxuICAgICAgcHJvdmlkZXJzOiBbXHJcbiAgICAgICAgQXBwQnJlYWRjcnVtYlNlcnZpY2VcclxuICAgICAgXVxyXG4gICAgfTtcclxuICB9XHJcbn1cclxuIiwiaW1wb3J0IHsgQ29tcG9uZW50LCBFbGVtZW50UmVmLCBJbnB1dCwgT25Jbml0ICB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBSZXBsYWNlIH0gZnJvbSAnLi8uLi9zaGFyZWQnO1xyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtZm9vdGVyJyxcclxuICB0ZW1wbGF0ZTogYFxyXG4gICAgPGZvb3RlciBjbGFzcz1cImFwcC1mb290ZXJcIj5cclxuICAgICAgPG5nLWNvbnRlbnQ+PC9uZy1jb250ZW50PlxyXG4gICAgPC9mb290ZXI+XHJcbiAgYFxyXG59KVxyXG5leHBvcnQgY2xhc3MgQXBwRm9vdGVyQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcclxuICBASW5wdXQoKSBmaXhlZDogYm9vbGVhbjtcclxuXHJcbiAgY29uc3RydWN0b3IocHJpdmF0ZSBlbDogRWxlbWVudFJlZikge31cclxuXHJcbiAgbmdPbkluaXQoKSB7XHJcbiAgICBSZXBsYWNlKHRoaXMuZWwpO1xyXG4gICAgdGhpcy5pc0ZpeGVkKHRoaXMuZml4ZWQpO1xyXG4gIH1cclxuXHJcbiAgaXNGaXhlZChmaXhlZDogYm9vbGVhbik6IHZvaWQge1xyXG4gICAgaWYgKHRoaXMuZml4ZWQpIHsgZG9jdW1lbnQucXVlcnlTZWxlY3RvcignYm9keScpLmNsYXNzTGlzdC5hZGQoJ2Zvb3Rlci1maXhlZCcpOyB9XHJcbiAgfVxyXG59XHJcbiIsImltcG9ydCB7IENvbW1vbk1vZHVsZX0gZnJvbSAnQGFuZ3VsYXIvY29tbW9uJztcclxuaW1wb3J0IHsgTmdNb2R1bGUgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuXHJcbmltcG9ydCB7IEFwcEZvb3RlckNvbXBvbmVudCB9IGZyb20gJy4vYXBwLWZvb3Rlci5jb21wb25lbnQnO1xyXG5cclxuQE5nTW9kdWxlKHtcclxuICBpbXBvcnRzOiBbIENvbW1vbk1vZHVsZSBdLFxyXG4gIGV4cG9ydHM6IFsgQXBwRm9vdGVyQ29tcG9uZW50IF0sXHJcbiAgZGVjbGFyYXRpb25zOiBbIEFwcEZvb3RlckNvbXBvbmVudCBdXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBcHBGb290ZXJNb2R1bGUge31cclxuIiwiaW1wb3J0IHsgQ29tcG9uZW50LCBFbGVtZW50UmVmLCBJbnB1dCwgT25Jbml0IH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7IFJlcGxhY2UgfSBmcm9tICcuLy4uL3NoYXJlZCc7XHJcblxyXG5AQ29tcG9uZW50KHtcclxuICBzZWxlY3RvcjogJ2FwcC1oZWFkZXInLFxyXG4gIHRlbXBsYXRlOiBgXHJcbiAgICA8aGVhZGVyIGNsYXNzPVwiYXBwLWhlYWRlciBuYXZiYXJcIj5cclxuICAgICAgPG5nLXRlbXBsYXRlIFtuZ0lmXT1cIm1vYmlsZVNpZGViYXJUb2dnbGVyICE9IGZhbHNlXCI+XHJcbiAgICAgICAgPGJ1dHRvbiBjbGFzcz1cIm5hdmJhci10b2dnbGVyIGQtbGctbm9uZVwiIHR5cGU9XCJidXR0b25cIiBhcHBTaWRlYmFyVG9nZ2xlcj5cclxuICAgICAgICAgIDxzcGFuIGNsYXNzPVwibmF2YmFyLXRvZ2dsZXItaWNvblwiPjwvc3Bhbj5cclxuICAgICAgICA8L2J1dHRvbj5cclxuICAgICAgPC9uZy10ZW1wbGF0ZT5cclxuICAgICAgPG5nLXRlbXBsYXRlIFtuZ0lmXT1cIm5hdmJhckJyYW5kIHx8IG5hdmJhckJyYW5kRnVsbCB8fCBuYXZiYXJCcmFuZE1pbmltaXplZFwiPlxyXG4gICAgICAgIDxhIGNsYXNzPVwibmF2YmFyLWJyYW5kXCIgaHJlZj1cIiNcIj5cclxuICAgICAgICAgIDxpbWcgKm5nSWY9XCJuYXZiYXJCcmFuZFwiXHJcbiAgICAgICAgICAgICAgIFtzcmNdPVwiaW1nU3JjKG5hdmJhckJyYW5kKVwiXHJcbiAgICAgICAgICAgICAgIFthdHRyLndpZHRoXT1cImltZ1dpZHRoKG5hdmJhckJyYW5kKVwiXHJcbiAgICAgICAgICAgICAgIFthdHRyLmhlaWdodF09XCJpbWdIZWlnaHQobmF2YmFyQnJhbmQpXCJcclxuICAgICAgICAgICAgICAgW2F0dHIuYWx0XT1cImltZ0FsdChuYXZiYXJCcmFuZClcIlxyXG4gICAgICAgICAgICAgICBjbGFzcz1cIm5hdmJhci1icmFuZFwiPlxyXG4gICAgICAgICAgPGltZyAqbmdJZj1cIm5hdmJhckJyYW5kRnVsbFwiXHJcbiAgICAgICAgICAgICAgIFtzcmNdPVwiaW1nU3JjKG5hdmJhckJyYW5kRnVsbClcIlxyXG4gICAgICAgICAgICAgICBbYXR0ci53aWR0aF09XCJpbWdXaWR0aChuYXZiYXJCcmFuZEZ1bGwpXCJcclxuICAgICAgICAgICAgICAgW2F0dHIuaGVpZ2h0XT1cImltZ0hlaWdodChuYXZiYXJCcmFuZEZ1bGwpXCJcclxuICAgICAgICAgICAgICAgW2F0dHIuYWx0XT1cImltZ0FsdChuYXZiYXJCcmFuZEZ1bGwpXCJcclxuICAgICAgICAgICAgICAgY2xhc3M9XCJuYXZiYXItYnJhbmQtZnVsbFwiPlxyXG4gICAgICAgICAgPGltZyAqbmdJZj1cIm5hdmJhckJyYW5kTWluaW1pemVkXCJcclxuICAgICAgICAgICAgICAgW3NyY109XCJpbWdTcmMobmF2YmFyQnJhbmRNaW5pbWl6ZWQpXCJcclxuICAgICAgICAgICAgICAgW2F0dHIud2lkdGhdPVwiaW1nV2lkdGgobmF2YmFyQnJhbmRNaW5pbWl6ZWQpXCJcclxuICAgICAgICAgICAgICAgW2F0dHIuaGVpZ2h0XT1cImltZ0hlaWdodChuYXZiYXJCcmFuZE1pbmltaXplZClcIlxyXG4gICAgICAgICAgICAgICBbYXR0ci5hbHRdPVwiaW1nQWx0KG5hdmJhckJyYW5kTWluaW1pemVkKVwiXHJcbiAgICAgICAgICAgICAgIGNsYXNzPVwibmF2YmFyLWJyYW5kLW1pbmltaXplZFwiPlxyXG4gICAgICAgIDwvYT5cclxuICAgICAgPC9uZy10ZW1wbGF0ZT5cclxuICAgICAgPG5nLXRlbXBsYXRlIFtuZ0lmXT1cInNpZGViYXJUb2dnbGVyICE9IGZhbHNlXCI+XHJcbiAgICAgICAgPGJ1dHRvbiBjbGFzcz1cIm5hdmJhci10b2dnbGVyIGQtbWQtZG93bi1ub25lXCIgdHlwZT1cImJ1dHRvblwiIFthcHBTaWRlYmFyVG9nZ2xlcl09XCJzaWRlYmFyVG9nZ2xlclwiPlxyXG4gICAgICAgICAgPHNwYW4gY2xhc3M9XCJuYXZiYXItdG9nZ2xlci1pY29uXCI+PC9zcGFuPlxyXG4gICAgICAgIDwvYnV0dG9uPlxyXG4gICAgICA8L25nLXRlbXBsYXRlPlxyXG4gICAgICA8bmctY29udGVudD48L25nLWNvbnRlbnQ+XHJcbiAgICAgIDxuZy10ZW1wbGF0ZSBbbmdJZl09XCJhc2lkZU1lbnVUb2dnbGVyICE9IGZhbHNlXCI+XHJcbiAgICAgICAgPGJ1dHRvbiBjbGFzcz1cIm5hdmJhci10b2dnbGVyIGQtbWQtZG93bi1ub25lXCIgdHlwZT1cImJ1dHRvblwiIFthcHBBc2lkZU1lbnVUb2dnbGVyXT1cImFzaWRlTWVudVRvZ2dsZXJcIj5cclxuICAgICAgICAgIDxzcGFuIGNsYXNzPVwibmF2YmFyLXRvZ2dsZXItaWNvblwiPjwvc3Bhbj5cclxuICAgICAgICA8L2J1dHRvbj5cclxuICAgICAgPC9uZy10ZW1wbGF0ZT5cclxuICAgICAgPG5nLXRlbXBsYXRlIFtuZ0lmXT1cIm1vYmlsZUFzaWRlTWVudVRvZ2dsZXIgIT0gZmFsc2VcIj5cclxuICAgICAgICA8YnV0dG9uIGNsYXNzPVwibmF2YmFyLXRvZ2dsZXIgZC1sZy1ub25lXCIgdHlwZT1cImJ1dHRvblwiIGFwcEFzaWRlTWVudVRvZ2dsZXI+XHJcbiAgICAgICAgICA8c3BhbiBjbGFzcz1cIm5hdmJhci10b2dnbGVyLWljb25cIj48L3NwYW4+XHJcbiAgICAgICAgPC9idXR0b24+XHJcbiAgICAgIDwvbmctdGVtcGxhdGU+XHJcbiAgICA8L2hlYWRlcj5cclxuICBgXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBcHBIZWFkZXJDb21wb25lbnQgaW1wbGVtZW50cyBPbkluaXQge1xyXG5cclxuICBASW5wdXQoKSBmaXhlZDogYm9vbGVhbjtcclxuXHJcbiAgQElucHV0KCkgbmF2YmFyQnJhbmQ6IGFueTtcclxuICBASW5wdXQoKSBuYXZiYXJCcmFuZEZ1bGw6IGFueTtcclxuICBASW5wdXQoKSBuYXZiYXJCcmFuZE1pbmltaXplZDogYW55O1xyXG5cclxuICBASW5wdXQoKSBzaWRlYmFyVG9nZ2xlcjogYW55O1xyXG4gIEBJbnB1dCgpIG1vYmlsZVNpZGViYXJUb2dnbGVyOiBhbnk7XHJcblxyXG4gIEBJbnB1dCgpIGFzaWRlTWVudVRvZ2dsZXI6IGFueTtcclxuICBASW5wdXQoKSBtb2JpbGVBc2lkZU1lbnVUb2dnbGVyOiBhbnk7XHJcblxyXG4gIGNvbnN0cnVjdG9yKHByaXZhdGUgZWw6IEVsZW1lbnRSZWYpIHt9XHJcblxyXG4gIG5nT25Jbml0KCkge1xyXG4gICAgUmVwbGFjZSh0aGlzLmVsKTtcclxuICAgIHRoaXMuaXNGaXhlZCh0aGlzLmZpeGVkKTtcclxuICB9XHJcblxyXG4gIGlzRml4ZWQoZml4ZWQ6IGJvb2xlYW4pOiB2b2lkIHtcclxuICAgIGlmICh0aGlzLmZpeGVkKSB7IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKS5jbGFzc0xpc3QuYWRkKCdoZWFkZXItZml4ZWQnKTsgfVxyXG4gIH1cclxuXHJcbiAgaW1nU3JjKGJyYW5kOiBhbnkpOiB2b2lkIHtcclxuICAgIHJldHVybiBicmFuZC5zcmMgPyBicmFuZC5zcmMgOiAnJztcclxuICB9XHJcblxyXG4gIGltZ1dpZHRoKGJyYW5kOiBhbnkpOiB2b2lkIHtcclxuICAgIHJldHVybiBicmFuZC53aWR0aCA/IGJyYW5kLndpZHRoIDogJ2F1dG8nO1xyXG4gIH1cclxuXHJcbiAgaW1nSGVpZ2h0KGJyYW5kOiBhbnkpOiB2b2lkIHtcclxuICAgIHJldHVybiBicmFuZC5oZWlnaHQgPyBicmFuZC5oZWlnaHQgOiAnYXV0byc7XHJcbiAgfVxyXG5cclxuICBpbWdBbHQoYnJhbmQ6IGFueSk6IHZvaWQge1xyXG4gICAgcmV0dXJuIGJyYW5kLmFsdCA/IGJyYW5kLmFsdCA6ICcnO1xyXG4gIH1cclxuXHJcbiAgYnJlYWtwb2ludChicmVha3BvaW50OiBhbnkpOiB2b2lkIHtcclxuICAgIGNvbnNvbGUubG9nKGJyZWFrcG9pbnQpO1xyXG4gICAgcmV0dXJuIGJyZWFrcG9pbnQgPyBicmVha3BvaW50IDogJyc7XHJcbiAgfVxyXG59XHJcbiIsImltcG9ydCB7IENvbW1vbk1vZHVsZX0gZnJvbSAnQGFuZ3VsYXIvY29tbW9uJztcclxuaW1wb3J0IHsgTmdNb2R1bGUgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHsgTGF5b3V0TW9kdWxlIH0gZnJvbSAnLi8uLi9zaGFyZWQvbGF5b3V0L2xheW91dC5tb2R1bGUnO1xyXG5cclxuaW1wb3J0IHsgQXBwSGVhZGVyQ29tcG9uZW50IH0gZnJvbSAnLi9hcHAtaGVhZGVyLmNvbXBvbmVudCc7XHJcblxyXG5ATmdNb2R1bGUoe1xyXG4gIGltcG9ydHM6IFtcclxuICAgIENvbW1vbk1vZHVsZSxcclxuICAgIExheW91dE1vZHVsZVxyXG4gIF0sXHJcbiAgZXhwb3J0czogW1xyXG4gICAgQXBwSGVhZGVyQ29tcG9uZW50LFxyXG4gICAgTGF5b3V0TW9kdWxlXHJcbiAgXSxcclxuICBkZWNsYXJhdGlvbnM6IFtcclxuICAgIEFwcEhlYWRlckNvbXBvbmVudFxyXG4gIF1cclxufSlcclxuZXhwb3J0IGNsYXNzIEFwcEhlYWRlck1vZHVsZSB7fVxyXG4iLCJpbXBvcnQgeyBDb21wb25lbnQsIEVsZW1lbnRSZWYsIE9uSW5pdCAgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHsgUmVwbGFjZSB9IGZyb20gJy4vLi4vc2hhcmVkJztcclxuXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnYXBwLXNpZGViYXItZm9vdGVyJyxcclxuICB0ZW1wbGF0ZTogYFxyXG4gICAgPGRpdiBjbGFzcz1cInNpZGViYXItZm9vdGVyXCI+XHJcbiAgICAgIDxuZy1jb250ZW50PjwvbmctY29udGVudD5cclxuICAgIDwvZGl2PmBcclxufSlcclxuZXhwb3J0IGNsYXNzIEFwcFNpZGViYXJGb290ZXJDb21wb25lbnQgaW1wbGVtZW50cyBPbkluaXQge1xyXG5cclxuICBjb25zdHJ1Y3Rvcihwcml2YXRlIGVsOiBFbGVtZW50UmVmKSB7IH1cclxuXHJcbiAgbmdPbkluaXQoKSB7XHJcbiAgICBSZXBsYWNlKHRoaXMuZWwpO1xyXG4gIH1cclxufVxyXG4iLCJpbXBvcnQgeyBDb21wb25lbnQsIEVsZW1lbnRSZWYsIE9uSW5pdCAgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHsgUmVwbGFjZSB9IGZyb20gJy4vLi4vc2hhcmVkJztcclxuXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnYXBwLXNpZGViYXItZm9ybScsXHJcbiAgdGVtcGxhdGU6IGBcclxuICAgIDxmb3JtIGNsYXNzPVwic2lkZWJhci1mb3JtXCI+XHJcbiAgICAgIDxuZy1jb250ZW50PjwvbmctY29udGVudD5cclxuICAgIDwvZm9ybT5cclxuICBgXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBcHBTaWRlYmFyRm9ybUNvbXBvbmVudCBpbXBsZW1lbnRzIE9uSW5pdCB7XHJcblxyXG4gIGNvbnN0cnVjdG9yKHByaXZhdGUgZWw6IEVsZW1lbnRSZWYpIHsgfVxyXG5cclxuICBuZ09uSW5pdCgpIHtcclxuICAgIFJlcGxhY2UodGhpcy5lbCk7XHJcbiAgfVxyXG59XHJcbiIsImltcG9ydCB7IENvbXBvbmVudCwgRWxlbWVudFJlZiwgT25Jbml0ICB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBSZXBsYWNlIH0gZnJvbSAnLi8uLi9zaGFyZWQnO1xyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtc2lkZWJhci1oZWFkZXInLFxyXG4gIHRlbXBsYXRlOiBgXHJcbiAgICA8ZGl2IGNsYXNzPVwic2lkZWJhci1oZWFkZXJcIj5cclxuICAgICAgPG5nLWNvbnRlbnQ+PC9uZy1jb250ZW50PlxyXG4gICAgPC9kaXY+XHJcbiAgYFxyXG59KVxyXG5leHBvcnQgY2xhc3MgQXBwU2lkZWJhckhlYWRlckNvbXBvbmVudCBpbXBsZW1lbnRzIE9uSW5pdCB7XHJcblxyXG4gIGNvbnN0cnVjdG9yKHByaXZhdGUgZWw6IEVsZW1lbnRSZWYpIHsgfVxyXG5cclxuICBuZ09uSW5pdCgpIHtcclxuICAgIFJlcGxhY2UodGhpcy5lbCk7XHJcbiAgfVxyXG59XHJcbiIsImltcG9ydCB7IENvbXBvbmVudCwgRWxlbWVudFJlZiwgT25Jbml0ICB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBSZXBsYWNlIH0gZnJvbSAnLi8uLi9zaGFyZWQnO1xyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtc2lkZWJhci1taW5pbWl6ZXInLFxyXG4gIHRlbXBsYXRlOiBgXHJcbiAgICA8YnV0dG9uIGNsYXNzPVwic2lkZWJhci1taW5pbWl6ZXJcIiB0eXBlPVwiYnV0dG9uXCIgYXBwU2lkZWJhck1pbmltaXplciBhcHBCcmFuZE1pbmltaXplcj48L2J1dHRvbj5cclxuICBgXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBcHBTaWRlYmFyTWluaW1pemVyQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcclxuXHJcbiAgY29uc3RydWN0b3IocHJpdmF0ZSBlbDogRWxlbWVudFJlZikgeyB9XHJcblxyXG4gIG5nT25Jbml0KCkge1xyXG4gICAgUmVwbGFjZSh0aGlzLmVsKTtcclxuICB9XHJcbn1cclxuIiwiaW1wb3J0IHsgQ29tcG9uZW50LCBJbnB1dCwgSG9zdEJpbmRpbmcsIE9uSW5pdCB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBzaWRlYmFyQ3NzQ2xhc3NlcyB9IGZyb20gJy4vLi4vc2hhcmVkJztcclxuXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnYXBwLXNpZGViYXInLFxyXG4gIHRlbXBsYXRlOiBgPG5nLWNvbnRlbnQ+PC9uZy1jb250ZW50PmBcclxufSlcclxuZXhwb3J0IGNsYXNzIEFwcFNpZGViYXJDb21wb25lbnQgaW1wbGVtZW50cyBPbkluaXQge1xyXG4gIEBJbnB1dCgpIGNvbXBhY3Q6IGJvb2xlYW47XHJcbiAgQElucHV0KCkgZGlzcGxheTogYW55O1xyXG4gIEBJbnB1dCgpIGZpeGVkOiBib29sZWFuO1xyXG4gIEBJbnB1dCgpIG1pbmltaXplZDogYm9vbGVhbjtcclxuICBASW5wdXQoKSBvZmZDYW52YXM6IGJvb2xlYW47XHJcblxyXG4gIEBIb3N0QmluZGluZygnY2xhc3Muc2lkZWJhcicpIHRydWU7XHJcblxyXG4gIGNvbnN0cnVjdG9yKCkge31cclxuXHJcbiAgbmdPbkluaXQoKSB7XHJcbiAgICB0aGlzLmRpc3BsYXlCcmVha3BvaW50KHRoaXMuZGlzcGxheSk7XHJcbiAgICB0aGlzLmlzQ29tcGFjdCh0aGlzLmNvbXBhY3QpO1xyXG4gICAgdGhpcy5pc0ZpeGVkKHRoaXMuZml4ZWQpO1xyXG4gICAgdGhpcy5pc01pbmltaXplZCh0aGlzLm1pbmltaXplZCk7XHJcbiAgICB0aGlzLmlzT2ZmQ2FudmFzKHRoaXMub2ZmQ2FudmFzKTtcclxuICB9XHJcblxyXG4gIGlzQ29tcGFjdChjb21wYWN0OiBib29sZWFuKTogdm9pZCB7XHJcbiAgICBpZiAodGhpcy5jb21wYWN0KSB7IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKS5jbGFzc0xpc3QuYWRkKCdzaWRlYmFyLWNvbXBhY3QnKTsgfVxyXG4gIH1cclxuXHJcbiAgaXNGaXhlZChmaXhlZDogYm9vbGVhbik6IHZvaWQge1xyXG4gICAgaWYgKHRoaXMuZml4ZWQpIHsgZG9jdW1lbnQucXVlcnlTZWxlY3RvcignYm9keScpLmNsYXNzTGlzdC5hZGQoJ3NpZGViYXItZml4ZWQnKTsgfVxyXG4gIH1cclxuXHJcbiAgaXNNaW5pbWl6ZWQobWluaW1pemVkOiBib29sZWFuKTogdm9pZCB7XHJcbiAgICBpZiAodGhpcy5taW5pbWl6ZWQpIHsgZG9jdW1lbnQucXVlcnlTZWxlY3RvcignYm9keScpLmNsYXNzTGlzdC5hZGQoJ3NpZGViYXItbWluaW1pemVkJyk7IH1cclxuICB9XHJcblxyXG4gIGlzT2ZmQ2FudmFzKG9mZkNhbnZhczogYm9vbGVhbik6IHZvaWQge1xyXG4gICAgaWYgKHRoaXMub2ZmQ2FudmFzKSB7IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKS5jbGFzc0xpc3QuYWRkKCdzaWRlYmFyLW9mZi1jYW52YXMnKTsgfVxyXG4gIH1cclxuXHJcbiAgZml4ZWRQb3NpdGlvbihmaXhlZDogYm9vbGVhbik6IHZvaWQge1xyXG4gICAgaWYgKHRoaXMuZml4ZWQpIHsgZG9jdW1lbnQucXVlcnlTZWxlY3RvcignYm9keScpLmNsYXNzTGlzdC5hZGQoJ3NpZGViYXItZml4ZWQnKTsgfVxyXG4gIH1cclxuXHJcbiAgZGlzcGxheUJyZWFrcG9pbnQoZGlzcGxheTogYW55KTogdm9pZCB7XHJcbiAgICBpZiAodGhpcy5kaXNwbGF5ICE9PSBmYWxzZSApIHtcclxuICAgICAgbGV0IGNzc0NsYXNzO1xyXG4gICAgICB0aGlzLmRpc3BsYXkgPyBjc3NDbGFzcyA9IGBzaWRlYmFyLSR7dGhpcy5kaXNwbGF5fS1zaG93YCA6IGNzc0NsYXNzID0gc2lkZWJhckNzc0NsYXNzZXNbMF07XHJcbiAgICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ2JvZHknKS5jbGFzc0xpc3QuYWRkKGNzc0NsYXNzKTtcclxuICAgIH1cclxuICB9XHJcbn1cclxuIiwiaW1wb3J0IHsgQ29tcG9uZW50LCBEaXJlY3RpdmUsIEVsZW1lbnRSZWYsIEhvc3RCaW5kaW5nLCBIb3N0TGlzdGVuZXIsIElucHV0LCBPbkluaXQsIFJlbmRlcmVyMiwgVmlld0VuY2Fwc3VsYXRpb24gfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHsgUmVwbGFjZSB9IGZyb20gJy4vLi4vc2hhcmVkJztcclxuXHJcbkBEaXJlY3RpdmUoe1xyXG4gIHNlbGVjdG9yOiAnW2FwcE5hdkRyb3Bkb3duXSdcclxufSlcclxuZXhwb3J0IGNsYXNzIE5hdkRyb3Bkb3duRGlyZWN0aXZlIHtcclxuXHJcbiAgY29uc3RydWN0b3IocHJpdmF0ZSBlbDogRWxlbWVudFJlZikgeyB9XHJcblxyXG4gIHRvZ2dsZSgpIHtcclxuICAgIHRoaXMuZWwubmF0aXZlRWxlbWVudC5jbGFzc0xpc3QudG9nZ2xlKCdvcGVuJyk7XHJcbiAgfVxyXG59XHJcblxyXG4vKipcclxuKiBBbGxvd3MgdGhlIGRyb3Bkb3duIHRvIGJlIHRvZ2dsZWQgdmlhIGNsaWNrLlxyXG4qL1xyXG5ARGlyZWN0aXZlKHtcclxuICBzZWxlY3RvcjogJ1thcHBOYXZEcm9wZG93blRvZ2dsZV0nXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBOYXZEcm9wZG93blRvZ2dsZURpcmVjdGl2ZSB7XHJcbiAgY29uc3RydWN0b3IocHJpdmF0ZSBkcm9wZG93bjogTmF2RHJvcGRvd25EaXJlY3RpdmUpIHt9XHJcblxyXG4gIEBIb3N0TGlzdGVuZXIoJ2NsaWNrJywgWyckZXZlbnQnXSlcclxuICB0b2dnbGVPcGVuKCRldmVudDogYW55KSB7XHJcbiAgICAkZXZlbnQucHJldmVudERlZmF1bHQoKTtcclxuICAgIHRoaXMuZHJvcGRvd24udG9nZ2xlKCk7XHJcbiAgfVxyXG59XHJcblxyXG5AQ29tcG9uZW50KHtcclxuICBzZWxlY3RvcjogJ2FwcC1zaWRlYmFyLW5hdicsXHJcbiAgdGVtcGxhdGU6IGBcclxuICAgIDx1bCBjbGFzcz1cIm5hdlwiPlxyXG4gICAgICA8bmctdGVtcGxhdGUgbmdGb3IgbGV0LW5hdml0ZW0gW25nRm9yT2ZdPVwibmF2SXRlbXNcIj5cclxuICAgICAgICA8bGkgKm5nSWY9XCJpc0RpdmlkZXIobmF2aXRlbSlcIiBjbGFzcz1cIm5hdi1kaXZpZGVyXCI+PC9saT5cclxuICAgICAgICA8bmctdGVtcGxhdGUgW25nSWZdPVwiaXNUaXRsZShuYXZpdGVtKVwiPlxyXG4gICAgICAgICAgPGFwcC1zaWRlYmFyLW5hdi10aXRsZSBbdGl0bGVdPSduYXZpdGVtJz48L2FwcC1zaWRlYmFyLW5hdi10aXRsZT5cclxuICAgICAgICA8L25nLXRlbXBsYXRlPlxyXG4gICAgICAgIDxuZy10ZW1wbGF0ZSBbbmdJZl09XCIhaXNEaXZpZGVyKG5hdml0ZW0pJiYhaXNUaXRsZShuYXZpdGVtKVwiPlxyXG4gICAgICAgICAgPGFwcC1zaWRlYmFyLW5hdi1pdGVtIFtpdGVtXT0nbmF2aXRlbSc+PC9hcHAtc2lkZWJhci1uYXYtaXRlbT5cclxuICAgICAgICA8L25nLXRlbXBsYXRlPlxyXG4gICAgICA8L25nLXRlbXBsYXRlPlxyXG4gICAgPC91bD5gXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBcHBTaWRlYmFyTmF2Q29tcG9uZW50IHtcclxuICBASW5wdXQoKSBuYXZJdGVtczogYW55O1xyXG5cclxuICBASG9zdEJpbmRpbmcoJ2NsYXNzLnNpZGViYXItbmF2JykgdHJ1ZTtcclxuICBASG9zdEJpbmRpbmcoJ2F0dHIucm9sZScpIHJvbGUgPSAnbmF2JztcclxuXHJcbiAgcHVibGljIGlzRGl2aWRlcihpdGVtKSB7XHJcbiAgICByZXR1cm4gaXRlbS5kaXZpZGVyID8gdHJ1ZSA6IGZhbHNlO1xyXG4gIH1cclxuXHJcbiAgcHVibGljIGlzVGl0bGUoaXRlbSkge1xyXG4gICAgcmV0dXJuIGl0ZW0udGl0bGUgPyB0cnVlIDogZmFsc2U7XHJcbiAgfVxyXG5cclxuICBjb25zdHJ1Y3RvcigpIHsgfVxyXG59XHJcblxyXG5pbXBvcnQgeyBSb3V0ZXIgfSBmcm9tICdAYW5ndWxhci9yb3V0ZXInO1xyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtc2lkZWJhci1uYXYtaXRlbScsXHJcbiAgdGVtcGxhdGU6IGBcclxuICAgIDxsaSAqbmdJZj1cIiFpc0Ryb3Bkb3duKCk7IGVsc2UgZHJvcGRvd25cIiBbbmdDbGFzc109XCJoYXNDbGFzcygpID8gJ25hdi1pdGVtICcgKyBpdGVtLmNsYXNzIDogJ25hdi1pdGVtJ1wiPlxyXG4gICAgICA8YXBwLXNpZGViYXItbmF2LWxpbmsgW2xpbmtdPSdpdGVtJz48L2FwcC1zaWRlYmFyLW5hdi1saW5rPlxyXG4gICAgPC9saT5cclxuICAgIDxuZy10ZW1wbGF0ZSAjZHJvcGRvd24+XHJcbiAgICAgIDxsaSBbbmdDbGFzc109XCJoYXNDbGFzcygpID8gJ25hdi1pdGVtIG5hdi1kcm9wZG93biAnICsgaXRlbS5jbGFzcyA6ICduYXYtaXRlbSBuYXYtZHJvcGRvd24nXCJcclxuICAgICAgICAgIFtjbGFzcy5vcGVuXT1cImlzQWN0aXZlKClcIlxyXG4gICAgICAgICAgcm91dGVyTGlua0FjdGl2ZT1cIm9wZW5cIlxyXG4gICAgICAgICAgYXBwTmF2RHJvcGRvd24+XHJcbiAgICAgICAgPGFwcC1zaWRlYmFyLW5hdi1kcm9wZG93biBbbGlua109J2l0ZW0nPjwvYXBwLXNpZGViYXItbmF2LWRyb3Bkb3duPlxyXG4gICAgICA8L2xpPlxyXG4gICAgPC9uZy10ZW1wbGF0ZT5cclxuICAgIGBcclxufSlcclxuZXhwb3J0IGNsYXNzIEFwcFNpZGViYXJOYXZJdGVtQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcclxuICBASW5wdXQoKSBpdGVtOiBhbnk7XHJcblxyXG4gIHB1YmxpYyBoYXNDbGFzcygpIHtcclxuICAgIHJldHVybiB0aGlzLml0ZW0uY2xhc3MgPyB0cnVlIDogZmFsc2U7XHJcbiAgfVxyXG5cclxuICBwdWJsaWMgaXNEcm9wZG93bigpIHtcclxuICAgIHJldHVybiB0aGlzLml0ZW0uY2hpbGRyZW4gPyB0cnVlIDogZmFsc2U7XHJcbiAgfVxyXG5cclxuICBwdWJsaWMgdGhpc1VybCgpIHtcclxuICAgIHJldHVybiB0aGlzLml0ZW0udXJsO1xyXG4gIH1cclxuXHJcbiAgcHVibGljIGlzQWN0aXZlKCkge1xyXG4gICAgcmV0dXJuIHRoaXMucm91dGVyLmlzQWN0aXZlKHRoaXMudGhpc1VybCgpLCBmYWxzZSk7XHJcbiAgfVxyXG5cclxuICBjb25zdHJ1Y3RvciggcHJpdmF0ZSByb3V0ZXI6IFJvdXRlciwgcHJpdmF0ZSBlbDogRWxlbWVudFJlZiApIHsgfVxyXG5cclxuICBuZ09uSW5pdCgpIHtcclxuICAgIFJlcGxhY2UodGhpcy5lbCk7XHJcbiAgfVxyXG5cclxufVxyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtc2lkZWJhci1uYXYtbGluaycsXHJcbiAgdGVtcGxhdGU6IGBcclxuICAgIDxhICpuZ0lmPVwiIWlzRXh0ZXJuYWxMaW5rKCk7IGVsc2UgZXh0ZXJuYWxcIlxyXG4gICAgICBbbmdDbGFzc109XCJoYXNWYXJpYW50KCkgPyAnbmF2LWxpbmsgbmF2LWxpbmstJyArIGxpbmsudmFyaWFudCA6ICduYXYtbGluaydcIlxyXG4gICAgICByb3V0ZXJMaW5rQWN0aXZlPVwiYWN0aXZlXCJcclxuICAgICAgW3JvdXRlckxpbmtdPVwiW2xpbmsudXJsXVwiXHJcbiAgICAgIChjbGljayk9XCJoaWRlTW9iaWxlKClcIj5cclxuICAgICAgPGkgKm5nSWY9XCJpc0ljb24oKVwiIGNsYXNzPVwibmF2LWljb24ge3sgbGluay5pY29uIH19XCI+PC9pPlxyXG4gICAgICB7eyBsaW5rLm5hbWUgfX1cclxuICAgICAgPHNwYW4gKm5nSWY9XCJpc0JhZGdlKClcIiBbbmdDbGFzc109XCInYmFkZ2UgYmFkZ2UtJyArIGxpbmsuYmFkZ2UudmFyaWFudFwiPnt7IGxpbmsuYmFkZ2UudGV4dCB9fTwvc3Bhbj5cclxuICAgIDwvYT5cclxuICAgIDxuZy10ZW1wbGF0ZSAjZXh0ZXJuYWw+XHJcbiAgICAgIDxhIFtuZ0NsYXNzXT1cImhhc1ZhcmlhbnQoKSA/ICduYXYtbGluayBuYXYtbGluay0nICsgbGluay52YXJpYW50IDogJ25hdi1saW5rJ1wiIGhyZWY9XCJ7e2xpbmsudXJsfX1cIj5cclxuICAgICAgICA8aSAqbmdJZj1cImlzSWNvbigpXCIgY2xhc3M9XCJuYXYtaWNvbiB7eyBsaW5rLmljb24gfX1cIj48L2k+XHJcbiAgICAgICAge3sgbGluay5uYW1lIH19XHJcbiAgICAgICAgPHNwYW4gKm5nSWY9XCJpc0JhZGdlKClcIiBbbmdDbGFzc109XCInYmFkZ2UgYmFkZ2UtJyArIGxpbmsuYmFkZ2UudmFyaWFudFwiPnt7IGxpbmsuYmFkZ2UudGV4dCB9fTwvc3Bhbj5cclxuICAgICAgPC9hPlxyXG4gICAgPC9uZy10ZW1wbGF0ZT5cclxuICBgXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBcHBTaWRlYmFyTmF2TGlua0NvbXBvbmVudCBpbXBsZW1lbnRzIE9uSW5pdCB7XHJcbiAgQElucHV0KCkgbGluazogYW55O1xyXG5cclxuICBwdWJsaWMgaGFzVmFyaWFudCgpIHtcclxuICAgIHJldHVybiB0aGlzLmxpbmsudmFyaWFudCA/IHRydWUgOiBmYWxzZTtcclxuICB9XHJcblxyXG4gIHB1YmxpYyBpc0JhZGdlKCkge1xyXG4gICAgcmV0dXJuIHRoaXMubGluay5iYWRnZSA/IHRydWUgOiBmYWxzZTtcclxuICB9XHJcblxyXG4gIHB1YmxpYyBpc0V4dGVybmFsTGluaygpIHtcclxuICAgIHJldHVybiB0aGlzLmxpbmsudXJsLnN1YnN0cmluZygwLCA0KSA9PT0gJ2h0dHAnID8gdHJ1ZSA6IGZhbHNlO1xyXG4gIH1cclxuXHJcbiAgcHVibGljIGlzSWNvbigpIHtcclxuICAgIHJldHVybiB0aGlzLmxpbmsuaWNvbiA/IHRydWUgOiBmYWxzZTtcclxuICB9XHJcblxyXG4gIHB1YmxpYyBoaWRlTW9iaWxlKCkge1xyXG4gICAgaWYgKGRvY3VtZW50LmJvZHkuY2xhc3NMaXN0LmNvbnRhaW5zKCdzaWRlYmFyLXNob3cnKSkge1xyXG4gICAgICBkb2N1bWVudC5ib2R5LmNsYXNzTGlzdC50b2dnbGUoJ3NpZGViYXItc2hvdycpO1xyXG4gICAgfVxyXG4gIH1cclxuXHJcbiAgY29uc3RydWN0b3IoIHByaXZhdGUgcm91dGVyOiBSb3V0ZXIsIHByaXZhdGUgZWw6IEVsZW1lbnRSZWYgKSB7IH1cclxuXHJcbiAgbmdPbkluaXQoKSB7XHJcbiAgICBSZXBsYWNlKHRoaXMuZWwpO1xyXG4gIH1cclxufVxyXG5cclxuQENvbXBvbmVudCh7XHJcbiAgc2VsZWN0b3I6ICdhcHAtc2lkZWJhci1uYXYtZHJvcGRvd24nLFxyXG4gIHRlbXBsYXRlOiBgXHJcbiAgICA8YSBjbGFzcz1cIm5hdi1saW5rIG5hdi1kcm9wZG93bi10b2dnbGVcIiBhcHBOYXZEcm9wZG93blRvZ2dsZT5cclxuICAgICAgPGkgKm5nSWY9XCJpc0ljb24oKVwiIGNsYXNzPVwibmF2LWljb24ge3sgbGluay5pY29uIH19XCI+PC9pPlxyXG4gICAgICB7eyBsaW5rLm5hbWUgfX1cclxuICAgICAgPHNwYW4gKm5nSWY9XCJpc0JhZGdlKClcIiBbbmdDbGFzc109XCInYmFkZ2UgYmFkZ2UtJyArIGxpbmsuYmFkZ2UudmFyaWFudFwiPnt7IGxpbmsuYmFkZ2UudGV4dCB9fTwvc3Bhbj5cclxuICAgIDwvYT5cclxuICAgIDx1bCBjbGFzcz1cIm5hdi1kcm9wZG93bi1pdGVtc1wiPlxyXG4gICAgICA8bmctdGVtcGxhdGUgbmdGb3IgbGV0LWNoaWxkIFtuZ0Zvck9mXT1cImxpbmsuY2hpbGRyZW5cIj5cclxuICAgICAgICA8YXBwLXNpZGViYXItbmF2LWl0ZW0gW2l0ZW1dPSdjaGlsZCc+PC9hcHAtc2lkZWJhci1uYXYtaXRlbT5cclxuICAgICAgPC9uZy10ZW1wbGF0ZT5cclxuICAgIDwvdWw+XHJcbiAgYCxcclxuICBzdHlsZXM6IFsnLm5hdi1kcm9wZG93bi10b2dnbGUgeyBjdXJzb3I6IHBvaW50ZXI7IH0nXVxyXG59KVxyXG5leHBvcnQgY2xhc3MgQXBwU2lkZWJhck5hdkRyb3Bkb3duQ29tcG9uZW50IGltcGxlbWVudHMgT25Jbml0IHtcclxuICBASW5wdXQoKSBsaW5rOiBhbnk7XHJcblxyXG4gIHB1YmxpYyBpc0JhZGdlKCkge1xyXG4gICAgcmV0dXJuIHRoaXMubGluay5iYWRnZSA/IHRydWUgOiBmYWxzZTtcclxuICB9XHJcblxyXG4gIHB1YmxpYyBpc0ljb24oKSB7XHJcbiAgICByZXR1cm4gdGhpcy5saW5rLmljb24gPyB0cnVlIDogZmFsc2U7XHJcbiAgfVxyXG5cclxuICBjb25zdHJ1Y3RvciggcHJpdmF0ZSByb3V0ZXI6IFJvdXRlciwgcHJpdmF0ZSBlbDogRWxlbWVudFJlZiApIHsgfVxyXG5cclxuICBuZ09uSW5pdCgpIHtcclxuICAgIFJlcGxhY2UodGhpcy5lbCk7XHJcbiAgfVxyXG59XHJcblxyXG5AQ29tcG9uZW50KHtcclxuICBzZWxlY3RvcjogJ2FwcC1zaWRlYmFyLW5hdi10aXRsZScsXHJcbiAgdGVtcGxhdGU6ICcnXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBcHBTaWRlYmFyTmF2VGl0bGVDb21wb25lbnQgaW1wbGVtZW50cyBPbkluaXQge1xyXG4gIEBJbnB1dCgpIHRpdGxlOiBhbnk7XHJcblxyXG4gIGNvbnN0cnVjdG9yKHByaXZhdGUgZWw6IEVsZW1lbnRSZWYsIHByaXZhdGUgcmVuZGVyZXI6IFJlbmRlcmVyMikgeyB9XHJcblxyXG4gIG5nT25Jbml0KCkge1xyXG4gICAgY29uc3QgbmF0aXZlRWxlbWVudDogSFRNTEVsZW1lbnQgPSB0aGlzLmVsLm5hdGl2ZUVsZW1lbnQ7XHJcbiAgICBjb25zdCBsaSA9IHRoaXMucmVuZGVyZXIuY3JlYXRlRWxlbWVudCgnbGknKTtcclxuICAgIGNvbnN0IG5hbWUgPSB0aGlzLnJlbmRlcmVyLmNyZWF0ZVRleHQodGhpcy50aXRsZS5uYW1lKTtcclxuXHJcbiAgICB0aGlzLnJlbmRlcmVyLmFkZENsYXNzKGxpLCAnbmF2LXRpdGxlJyk7XHJcblxyXG4gICAgaWYgKCB0aGlzLnRpdGxlLmNsYXNzICkge1xyXG4gICAgICBjb25zdCBjbGFzc2VzID0gdGhpcy50aXRsZS5jbGFzcztcclxuICAgICAgdGhpcy5yZW5kZXJlci5hZGRDbGFzcyhsaSwgY2xhc3Nlcyk7XHJcbiAgICB9XHJcblxyXG4gICAgaWYgKCB0aGlzLnRpdGxlLndyYXBwZXIgKSB7XHJcbiAgICAgIGNvbnN0IHdyYXBwZXIgPSB0aGlzLnJlbmRlcmVyLmNyZWF0ZUVsZW1lbnQodGhpcy50aXRsZS53cmFwcGVyLmVsZW1lbnQpO1xyXG5cclxuICAgICAgdGhpcy5yZW5kZXJlci5hcHBlbmRDaGlsZCh3cmFwcGVyLCBuYW1lKTtcclxuICAgICAgdGhpcy5yZW5kZXJlci5hcHBlbmRDaGlsZChsaSwgd3JhcHBlcik7XHJcbiAgICB9IGVsc2Uge1xyXG4gICAgICB0aGlzLnJlbmRlcmVyLmFwcGVuZENoaWxkKGxpLCBuYW1lKTtcclxuICAgIH1cclxuICAgIHRoaXMucmVuZGVyZXIuYXBwZW5kQ2hpbGQobmF0aXZlRWxlbWVudCwgbGkpO1xyXG4gICAgUmVwbGFjZSh0aGlzLmVsKTtcclxuICB9XHJcbn1cclxuIiwiaW1wb3J0IHsgQ29tbW9uTW9kdWxlIH0gZnJvbSAnQGFuZ3VsYXIvY29tbW9uJztcclxuaW1wb3J0IHsgTmdNb2R1bGV9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBSb3V0ZXJNb2R1bGUgfSBmcm9tICdAYW5ndWxhci9yb3V0ZXInO1xyXG5pbXBvcnQgeyBIdHRwQ2xpZW50TW9kdWxlIH0gZnJvbSAnQGFuZ3VsYXIvY29tbW9uL2h0dHAnO1xyXG5pbXBvcnQgeyBMYXlvdXRNb2R1bGUgfSBmcm9tICcuLy4uL3NoYXJlZC9sYXlvdXQvbGF5b3V0Lm1vZHVsZSc7XHJcblxyXG4vLyBBcHAgU2lkZWJhciBDb21wb25lbnRcclxuaW1wb3J0IHsgQXBwU2lkZWJhckZvb3RlckNvbXBvbmVudCB9IGZyb20gJy4vYXBwLXNpZGViYXItZm9vdGVyLmNvbXBvbmVudCc7XHJcbmltcG9ydCB7IEFwcFNpZGViYXJGb3JtQ29tcG9uZW50IH0gZnJvbSAnLi9hcHAtc2lkZWJhci1mb3JtLmNvbXBvbmVudCc7XHJcbmltcG9ydCB7IEFwcFNpZGViYXJIZWFkZXJDb21wb25lbnQgfSBmcm9tICcuL2FwcC1zaWRlYmFyLWhlYWRlci5jb21wb25lbnQnO1xyXG5pbXBvcnQgeyBBcHBTaWRlYmFyTWluaW1pemVyQ29tcG9uZW50IH0gZnJvbSAnLi9hcHAtc2lkZWJhci1taW5pbWl6ZXIuY29tcG9uZW50JztcclxuaW1wb3J0IHsgQXBwU2lkZWJhckNvbXBvbmVudCB9IGZyb20gJy4vYXBwLXNpZGViYXIuY29tcG9uZW50JztcclxuaW1wb3J0IHtcclxuICBBcHBTaWRlYmFyTmF2Q29tcG9uZW50LFxyXG4gIEFwcFNpZGViYXJOYXZEcm9wZG93bkNvbXBvbmVudCxcclxuICBBcHBTaWRlYmFyTmF2SXRlbUNvbXBvbmVudCxcclxuICBBcHBTaWRlYmFyTmF2TGlua0NvbXBvbmVudCxcclxuICBBcHBTaWRlYmFyTmF2VGl0bGVDb21wb25lbnQsXHJcbiAgTmF2RHJvcGRvd25EaXJlY3RpdmUsXHJcbiAgTmF2RHJvcGRvd25Ub2dnbGVEaXJlY3RpdmVcclxufSBmcm9tICcuL2FwcC1zaWRlYmFyLW5hdi5jb21wb25lbnQnO1xyXG5cclxuQE5nTW9kdWxlKHtcclxuICBpbXBvcnRzOiBbXHJcbiAgICBDb21tb25Nb2R1bGUsXHJcbiAgICBSb3V0ZXJNb2R1bGUsXHJcbiAgICBMYXlvdXRNb2R1bGVcclxuICBdLFxyXG4gIGV4cG9ydHM6IFtcclxuICAgIEFwcFNpZGViYXJGb290ZXJDb21wb25lbnQsXHJcbiAgICBBcHBTaWRlYmFyRm9ybUNvbXBvbmVudCxcclxuICAgIEFwcFNpZGViYXJIZWFkZXJDb21wb25lbnQsXHJcbiAgICBBcHBTaWRlYmFyTWluaW1pemVyQ29tcG9uZW50LFxyXG4gICAgQXBwU2lkZWJhckNvbXBvbmVudCxcclxuICAgIEFwcFNpZGViYXJOYXZDb21wb25lbnQsXHJcbiAgICBBcHBTaWRlYmFyTmF2RHJvcGRvd25Db21wb25lbnQsXHJcbiAgICBBcHBTaWRlYmFyTmF2SXRlbUNvbXBvbmVudCxcclxuICAgIEFwcFNpZGViYXJOYXZMaW5rQ29tcG9uZW50LFxyXG4gICAgQXBwU2lkZWJhck5hdlRpdGxlQ29tcG9uZW50LFxyXG4gICAgTmF2RHJvcGRvd25EaXJlY3RpdmUsXHJcbiAgICBOYXZEcm9wZG93blRvZ2dsZURpcmVjdGl2ZSxcclxuICAgIExheW91dE1vZHVsZVxyXG4gIF0sXHJcbiAgZGVjbGFyYXRpb25zOiBbXHJcbiAgICBBcHBTaWRlYmFyRm9vdGVyQ29tcG9uZW50LFxyXG4gICAgQXBwU2lkZWJhckZvcm1Db21wb25lbnQsXHJcbiAgICBBcHBTaWRlYmFySGVhZGVyQ29tcG9uZW50LFxyXG4gICAgQXBwU2lkZWJhck1pbmltaXplckNvbXBvbmVudCxcclxuICAgIEFwcFNpZGViYXJNaW5pbWl6ZXJDb21wb25lbnQsXHJcbiAgICBBcHBTaWRlYmFyQ29tcG9uZW50LFxyXG4gICAgQXBwU2lkZWJhck5hdkNvbXBvbmVudCxcclxuICAgIEFwcFNpZGViYXJOYXZEcm9wZG93bkNvbXBvbmVudCxcclxuICAgIEFwcFNpZGViYXJOYXZJdGVtQ29tcG9uZW50LFxyXG4gICAgQXBwU2lkZWJhck5hdkxpbmtDb21wb25lbnQsXHJcbiAgICBBcHBTaWRlYmFyTmF2VGl0bGVDb21wb25lbnQsXHJcbiAgICBOYXZEcm9wZG93bkRpcmVjdGl2ZSxcclxuICAgIE5hdkRyb3Bkb3duVG9nZ2xlRGlyZWN0aXZlXHJcbiAgXVxyXG59KVxyXG5leHBvcnQgY2xhc3MgQXBwU2lkZWJhck1vZHVsZSB7IH1cclxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7QUFBQSxBQUFPLHVCQUFNLGlCQUFpQixHQUFrQjtJQUM5QyxjQUFjO0lBQ2QsaUJBQWlCO0lBQ2pCLGlCQUFpQjtJQUNqQixpQkFBaUI7SUFDakIsaUJBQWlCO0NBQ2xCLENBQUM7QUFFRixBQUFPLHVCQUFNLG1CQUFtQixHQUFrQjtJQUNoRCxpQkFBaUI7SUFDakIsb0JBQW9CO0lBQ3BCLG9C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
+export { AppAsideComponent, AppAsideModule, AppBreadcrumbComponent, AppBreadcrumbModule, AppFooterComponent, AppFooterModule, AppHeaderComponent, AppHeaderModule, AppSidebarComponent, AppSidebarModule, CuiBreadcrumbComponent, LayoutModule as ɵa, SidebarToggleDirective as ɵb, AppSidebarNavIconPipe as ɵba, AppSidebarNavBadgePipe as ɵbb, AppSidebarNavLinkPipe as ɵbc, AppSidebarNavItemClassPipe as ɵbd, SidebarMinimizeDirective as ɵc, MobileSidebarToggleDirective as ɵd, SidebarOffCanvasCloseDirective as ɵe, BrandMinimizeDirective as ɵf, AsideToggleDirective as ɵg, HtmlAttributesDirective as ɵh, ClassToggler as ɵi, AppBreadcrumbService as ɵj, AppSidebarService as ɵk, AppSidebarFooterComponent as ɵl, AppSidebarFormComponent as ɵm, AppSidebarHeaderComponent as ɵn, AppSidebarMinimizerComponent as ɵo, AppSidebarNavItemsComponent as ɵp, SidebarNavHelper as ɵq, AppSidebarNavComponent as ɵr, AppSidebarNavDividerComponent as ɵs, AppSidebarNavDropdownComponent as ɵt, AppSidebarNavLinkContentComponent as ɵu, AppSidebarNavLinkComponent as ɵv, AppSidebarNavTitleComponent as ɵw, NavDropdownDirective as ɵx, NavDropdownToggleDirective as ɵy, AppSidebarNavLabelComponent as ɵz };
+//# sourceMappingURL=coreui-angular.js.map

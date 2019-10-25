@@ -1,19 +1,12 @@
-import { Component, ElementRef, OnInit  } from '@angular/core';
-import { Replace } from './../shared';
+import {Component, HostBinding} from '@angular/core';
 
 @Component({
-  selector: 'app-sidebar-form',
-  template: `
-    <form class="sidebar-form">
-      <ng-content></ng-content>
-    </form>
-  `
+  selector: 'app-sidebar-form, cui-sidebar-form',
+  template: `<ng-content></ng-content>`
 })
-export class AppSidebarFormComponent implements OnInit {
+export class AppSidebarFormComponent {
 
-  constructor(private el: ElementRef) { }
+  @HostBinding('class.sidebar-form') _sidebarForm = true;
 
-  ngOnInit() {
-    Replace(this.el);
-  }
+  constructor() { }
 }
